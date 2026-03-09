@@ -160,7 +160,10 @@ class RatingCreate(BaseModel):
 
 class AppDB:
     def __init__(self):
-        self.engine = create_engine(DATABASE_URL, future=True)
+        self.engine = create_engine(
+            DATABASE_URL,
+            future=True,
+            connect_args={"check_same_thread": False})
         metadata.create_all(self.engine)
         self.seed_reference_data()
 
