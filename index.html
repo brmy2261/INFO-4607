@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Student Quest</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        background: #f5f5f5;
+        color: #111;
+      }
+
+      .app-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 24px;
+        background: #ffffff;
+        border-bottom: 1px solid #ddd;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .app-title {
+        margin: 0;
+        font-size: 1.4rem;
+      }
+
+      .auth-form {
+        max-width: 600px;
+        margin: 16px auto;
+        padding: 16px;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .auth-form input,
+      .auth-form textarea,
+      .auth-form select {
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font: inherit;
+      }
+
+      .auth-form textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        margin-top: 8px;
+      }
+
+      .mode-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        padding: 16px 24px;
+      }
+
+      .mode-button {
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background: #fff;
+        cursor: pointer;
+        font: inherit;
+      }
+
+      .mode-button.active {
+        border-color: #111;
+        font-weight: 600;
+      }
+
+      .error-message {
+        max-width: 600px;
+        margin: 16px auto 0 auto;
+        padding: 12px;
+        background: #fff1f1;
+        border: 1px solid #ffd0d0;
+        border-radius: 8px;
+        color: #111;
+      }
+
+      .empty-message {
+        padding: 16px;
+        text-align: center;
+        color: #555;
+      }
+
+      .section-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 16px;
+        padding: 16px;
+        padding-bottom: 90px;
+      }
+
+      .section-card {
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .section-title {
+        margin: 0;
+        font-size: 1.1rem;
+      }
+
+      .section-tagline {
+        color: #555;
+      }
+
+      .tabbar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        border-top: 1px solid #ddd;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0;
+        z-index: 20;
+      }
+
+      .tab-button {
+        padding: 12px 10px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font: inherit;
+      }
+
+      .tab-button.active {
+        font-weight: 700;
+      }
+
+      .profile-wrap {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 16px;
+        padding-bottom: 90px;
+      }
+
+      .profile-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      }
+
+      .profile-top {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .avatar {
+        width: 96px;
+        height: 96px;
+        border-radius: 999px;
+        object-fit: cover;
+        border: 1px solid #ddd;
+        background: #f2f2f2;
+      }
+
+      .profile-name {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+
+      .profile-email {
+        margin: 4px 0 0 0;
+        color: #666;
+        font-size: 0.95rem;
+      }
+
+      .profile-bio {
+        margin: 10px 0 0 0;
+        color: #333;
+        white-space: pre-wrap;
+      }
+
+      .profile-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+
+      .profile-button {
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        background: #fff;
+        cursor: pointer;
+        font: inherit;
+      }
+
+      .posts-header {
+        margin-top: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .posts-grid {
+        margin-top: 12px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+      }
+
+      .post-tile {
+        background: #f3f3f3;
+        border: 1px solid #e1e1e1;
+        border-radius: 10px;
+        height: 140px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #777;
+        font-size: 0.95rem;
+      }
+
+      .services-wrap {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 16px;
+        padding-bottom: 110px;
+      }
+
+      .services-topbar {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+
+      .services-search {
+        flex: 1;
+        min-width: 240px;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background: #fff;
+        font: inherit;
+      }
+
+      .services-search-button,
+      .services-clear-button {
+        padding: 12px 14px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background: #fff;
+        cursor: pointer;
+        font: inherit;
+      }
+
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+      }
+
+      .service-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 14px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .service-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .service-title {
+        margin: 0;
+        font-size: 1.05rem;
+      }
+
+      .service-price {
+        white-space: nowrap;
+        font-weight: 700;
+      }
+
+      .service-genre {
+        display: inline-block;
+        width: fit-content;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #f0f0f0;
+        font-size: 0.9rem;
+      }
+
+      .service-description {
+        margin: 0;
+        color: #444;
+        white-space: pre-wrap;
+      }
+
+      .service-meta {
+        color: #666;
+        font-size: 0.92rem;
+      }
+
+      .plus-button {
+        position: fixed;
+        right: 18px;
+        bottom: 76px;
+        width: 58px;
+        height: 58px;
+        border-radius: 999px;
+        border: none;
+        background: #111;
+        color: #fff;
+        font-size: 2rem;
+        line-height: 1;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+        z-index: 25;
+      }
+
+      .service-form-card {
+        max-width: 700px;
+        margin: 0 auto 16px auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        padding: 16px;
+      }
+
+      .service-form-title {
+        margin: 0 0 12px 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+      const API_URL = "http://localhost:8000";
+
+      function MyApp() {
+        return (
+          <div>
+            <header className="app-header">
+              <h1 className="app-title">Student Quest</h1>
+            </header>
+            <StudentQuest />
+          </div>
+        );
+      }
+
+      function StudentQuest() {
+        const [user, setUser] = React.useState(null);
+        const [token, setToken] = React.useState("");
+        const [mode, setMode] = React.useState("login");
+        const [error, setError] = React.useState("");
+
+        const [formOpen, setFormOpen] = React.useState(true);
+        const [activeTab, setActiveTab] = React.useState("social");
+
+        const [profile, setProfile] = React.useState(null);
+        const [profileLoading, setProfileLoading] = React.useState(false);
+        const [profileError, setProfileError] = React.useState("");
+        const [editOpen, setEditOpen] = React.useState(false);
+
+        const [editForm, setEditForm] = React.useState({
+          displayName: "",
+          avatarUrl: "",
+          bio: "",
+        });
+
+        const [formData, setFormData] = React.useState({
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+
+        const [services, setServices] = React.useState([]);
+        const [servicesLoading, setServicesLoading] = React.useState(false);
+        const [servicesError, setServicesError] = React.useState("");
+        const [serviceSearch, setServiceSearch] = React.useState("");
+        const [serviceFormOpen, setServiceFormOpen] = React.useState(false);
+        const [serviceForm, setServiceForm] = React.useState({
+          title: "",
+          genre: "",
+          description: "",
+          price: "",
+        });
+
+        React.useEffect(function () {
+          const savedToken = localStorage.getItem("studentquest_token");
+
+          if (savedToken) {
+            fetch(API_URL + "/me?token=" + savedToken)
+              .then(function (response) {
+                return response.json();
+              })
+              .then(function (data) {
+                if (data.error) {
+                  localStorage.removeItem("studentquest_token");
+                } else {
+                  setToken(savedToken);
+                  setUser(data);
+                  setFormOpen(false);
+                }
+              });
+          }
+        }, []);
+
+        React.useEffect(
+          function () {
+            if (!user) {
+              return;
+            }
+
+            if (activeTab !== "profile") {
+              return;
+            }
+
+            setProfileLoading(true);
+            setProfileError("");
+
+            fetch(API_URL + "/profile?token=" + token)
+              .then(function (response) {
+                return response.json();
+              })
+              .then(function (data) {
+                setProfileLoading(false);
+
+                if (data.error) {
+                  setProfileError(data.error);
+                  return;
+                }
+
+                setProfile(data);
+              });
+          },
+          [activeTab, user, token]
+        );
+
+        React.useEffect(
+          function () {
+            if (!user) {
+              return;
+            }
+
+            if (activeTab !== "services") {
+              return;
+            }
+
+            loadServices(serviceSearch);
+          },
+          [activeTab, user]
+        );
+
+        function loadServices(searchValue) {
+          setServicesLoading(true);
+          setServicesError("");
+
+          const cleanSearch = (searchValue || "").trim();
+          let url = API_URL + "/services";
+
+          if (cleanSearch !== "") {
+            url += "?genre=" + encodeURIComponent(cleanSearch);
+          }
+
+          fetch(url)
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              setServicesLoading(false);
+
+              if (data.error) {
+                setServicesError(data.error);
+                return;
+              }
+
+              setServices(data);
+            });
+        }
+
+        function handleOpenForm() {
+          setFormOpen(true);
+          setError("");
+        }
+
+        function handleCancelForm() {
+          setFormOpen(false);
+          setError("");
+
+          setFormData({
+            email: "",
+            password: "",
+            confirmPassword: "",
+          });
+        }
+
+        function handleSwitchMode(nextMode) {
+          setMode(nextMode);
+          setError("");
+
+          setFormData({
+            email: "",
+            password: "",
+            confirmPassword: "",
+          });
+
+          setFormOpen(true);
+        }
+
+        function handleChange(event) {
+          const nextFormData = {
+            ...formData,
+            [event.target.name]: event.target.value,
+          };
+          setFormData(nextFormData);
+        }
+
+        function handleSubmit(event) {
+          event.preventDefault();
+          setError("");
+
+          const cleanEmail = formData.email.trim().toLowerCase();
+
+          if (!cleanEmail || !formData.password) {
+            setError("Email and password are required.");
+            return;
+          }
+
+          if (mode === "register") {
+            if (formData.password.length < 6) {
+              setError("Password must be at least 6 characters.");
+              return;
+            }
+
+            if (formData.password !== formData.confirmPassword) {
+              setError("Passwords do not match.");
+              return;
+            }
+          }
+
+          const payload = {
+            email: cleanEmail,
+            password: formData.password,
+          };
+
+          const endpoint = mode === "login" ? "login" : "register";
+
+          fetch(API_URL + "/" + endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          })
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              if (data.error) {
+                setError(data.error);
+                return;
+              }
+
+              setToken(data.token);
+              setUser(data.user);
+              localStorage.setItem("studentquest_token", data.token);
+
+              setFormData({
+                email: "",
+                password: "",
+                confirmPassword: "",
+              });
+
+              setActiveTab("social");
+              setFormOpen(false);
+            });
+        }
+
+        function handleLogout() {
+          fetch(API_URL + "/logout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: token }),
+          })
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function () {
+              localStorage.removeItem("studentquest_token");
+              setUser(null);
+              setToken("");
+              setError("");
+              setMode("login");
+              setFormOpen(true);
+              setActiveTab("social");
+              setProfile(null);
+              setEditOpen(false);
+              setServices([]);
+              setServiceFormOpen(false);
+              setServiceSearch("");
+
+              setFormData({
+                email: "",
+                password: "",
+                confirmPassword: "",
+              });
+            });
+        }
+
+        function handleTab(tabName) {
+          setActiveTab(tabName);
+          setEditOpen(false);
+          setProfileError("");
+        }
+
+        function handleOpenEdit() {
+          if (!profile) {
+            return;
+          }
+
+          setEditForm({
+            displayName: profile.displayName || "",
+            avatarUrl: profile.avatarUrl || "",
+            bio: profile.bio || "",
+          });
+          setEditOpen(true);
+          setProfileError("");
+        }
+
+        function handleCancelEdit() {
+          setEditOpen(false);
+          setProfileError("");
+        }
+
+        function handleEditChange(event) {
+          const nextEditForm = {
+            ...editForm,
+            [event.target.name]: event.target.value,
+          };
+          setEditForm(nextEditForm);
+        }
+
+        function handleSaveProfile(event) {
+          event.preventDefault();
+          setProfileError("");
+
+          const payload = {
+            token: token,
+            profile: {
+              displayName: editForm.displayName,
+              avatarUrl: editForm.avatarUrl,
+              bio: editForm.bio,
+            },
+          };
+
+          fetch(API_URL + "/profile", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          })
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              if (data.error) {
+                setProfileError(data.error);
+                return;
+              }
+
+              setProfile(data);
+              setEditOpen(false);
+            });
+        }
+
+        function handleServiceSearchChange(event) {
+          setServiceSearch(event.target.value);
+        }
+
+        function handleServiceSearch(event) {
+          event.preventDefault();
+          loadServices(serviceSearch);
+        }
+
+        function handleClearServiceSearch() {
+          setServiceSearch("");
+          loadServices("");
+        }
+
+        function handleOpenServiceForm() {
+          setServiceFormOpen(true);
+          setServicesError("");
+        }
+
+        function handleCancelServiceForm() {
+          setServiceFormOpen(false);
+          setServicesError("");
+          setServiceForm({
+            title: "",
+            genre: "",
+            description: "",
+            price: "",
+          });
+        }
+
+        function handleServiceFormChange(event) {
+          const nextServiceForm = {
+            ...serviceForm,
+            [event.target.name]: event.target.value,
+          };
+          setServiceForm(nextServiceForm);
+        }
+
+        function handleCreateService(event) {
+          event.preventDefault();
+          setServicesError("");
+
+          const payload = {
+            token: token,
+            service: {
+              title: serviceForm.title,
+              genre: serviceForm.genre,
+              description: serviceForm.description,
+              price: serviceForm.price,
+            },
+          };
+
+          fetch(API_URL + "/services", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          })
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              if (data.error) {
+                setServicesError(data.error);
+                return;
+              }
+
+              setServiceForm({
+                title: "",
+                genre: "",
+                description: "",
+                price: "",
+              });
+
+              setServiceFormOpen(false);
+              loadServices(serviceSearch);
+            });
+        }
+
+        function renderLoggedInContent() {
+          if (activeTab === "social") {
+            return (
+              <div className="section-list">
+                <SectionCard
+                  title="Social"
+                  tagline="Post, meet people, and connect with other students."
+                />
+                <SectionCard
+                  title="Social feed"
+                  tagline="Next step: a feed of student posts."
+                />
+                <SectionCard
+                  title="Messages"
+                  tagline="Next step: DMs and group chats."
+                />
+              </div>
+            );
+          }
+
+          if (activeTab === "services") {
+            return (
+              <ServicesPage
+                services={services}
+                loading={servicesLoading}
+                error={servicesError}
+                searchValue={serviceSearch}
+                onSearchChange={handleServiceSearchChange}
+                onSearchSubmit={handleServiceSearch}
+                onClearSearch={handleClearServiceSearch}
+                formOpen={serviceFormOpen}
+                serviceForm={serviceForm}
+                onOpenForm={handleOpenServiceForm}
+                onCancelForm={handleCancelServiceForm}
+                onFormChange={handleServiceFormChange}
+                onCreateService={handleCreateService}
+              />
+            );
+          }
+
+          if (activeTab === "academic") {
+            return (
+              <div className="section-list">
+                <SectionCard
+                  title="Academics"
+                  tagline="Create rooms and study with people on the same tasks."
+                />
+                <SectionCard
+                  title="Open rooms"
+                  tagline="Next step: room list + join button."
+                />
+                <SectionCard
+                  title="Create a room"
+                  tagline="Next step: room creation form."
+                />
+              </div>
+            );
+          }
+
+          return (
+            <ProfilePage
+              user={user}
+              profile={profile}
+              loading={profileLoading}
+              error={profileError}
+              editOpen={editOpen}
+              editForm={editForm}
+              onOpenEdit={handleOpenEdit}
+              onCancelEdit={handleCancelEdit}
+              onEditChange={handleEditChange}
+              onSaveProfile={handleSaveProfile}
+            />
+          );
+        }
+
+        return (
+          <div>
+            {user ? (
+              <div>
+                <div style={{ padding: "16px 24px", textAlign: "right" }}>
+                  <button className="mode-button" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </div>
+
+                {renderLoggedInContent()}
+
+                <TabBar activeTab={activeTab} onTab={handleTab} />
+              </div>
+            ) : (
+              <div>
+                <div className="mode-buttons">
+                  <button
+                    className={"mode-button " + (mode === "login" ? "active" : "")}
+                    onClick={function () {
+                      handleSwitchMode("login");
+                    }}
+                  >
+                    Login
+                  </button>
+
+                  <button
+                    className={"mode-button " + (mode === "register" ? "active" : "")}
+                    onClick={function () {
+                      handleSwitchMode("register");
+                    }}
+                  >
+                    Register
+                  </button>
+                </div>
+
+                {error ? <div className="error-message">{error}</div> : null}
+
+                {formOpen && (
+                  <AuthForm
+                    mode={mode}
+                    formData={formData}
+                    onChange={handleChange}
+                    onCancel={handleCancelForm}
+                    onSubmit={handleSubmit}
+                  />
+                )}
+
+                {!formOpen ? (
+                  <div className="empty-message">
+                    Click Login/Register above to continue.
+                  </div>
+                ) : null}
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      function TabBar(props) {
+        return (
+          <nav className="tabbar">
+            <button
+              className={"tab-button " + (props.activeTab === "services" ? "active" : "")}
+              onClick={function () {
+                props.onTab("services");
+              }}
+            >
+              Services
+            </button>
+
+            <button
+              className={"tab-button " + (props.activeTab === "social" ? "active" : "")}
+              onClick={function () {
+                props.onTab("social");
+              }}
+            >
+              Social
+            </button>
+
+            <button
+              className={"tab-button " + (props.activeTab === "academic" ? "active" : "")}
+              onClick={function () {
+                props.onTab("academic");
+              }}
+            >
+              Academic
+            </button>
+
+            <button
+              className={"tab-button " + (props.activeTab === "profile" ? "active" : "")}
+              onClick={function () {
+                props.onTab("profile");
+              }}
+            >
+              Profile
+            </button>
+          </nav>
+        );
+      }
+
+      function ServicesPage(props) {
+        return (
+          <div className="services-wrap">
+            <form className="services-topbar" onSubmit={props.onSearchSubmit}>
+              <input
+                className="services-search"
+                placeholder="Search by genre (e.g. Tutoring, Design, Photography)"
+                value={props.searchValue}
+                onChange={props.onSearchChange}
+              />
+              <button className="services-search-button" type="submit">
+                Search
+              </button>
+              <button
+                className="services-clear-button"
+                type="button"
+                onClick={props.onClearSearch}
+              >
+                Clear
+              </button>
+            </form>
+
+            {props.error ? <div className="error-message">{props.error}</div> : null}
+
+            {props.formOpen ? (
+              <div className="service-form-card">
+                <h2 className="service-form-title">Post a Service</h2>
+
+                <form className="auth-form" style={{ margin: 0, boxShadow: "none", padding: 0 }} onSubmit={props.onCreateService}>
+                  <input
+                    name="title"
+                    placeholder="Service title"
+                    value={props.serviceForm.title}
+                    onChange={props.onFormChange}
+                  />
+
+                  <input
+                    name="genre"
+                    placeholder="Genre of work"
+                    value={props.serviceForm.genre}
+                    onChange={props.onFormChange}
+                  />
+
+                  <input
+                    name="price"
+                    placeholder="Price (example: $25/hour)"
+                    value={props.serviceForm.price}
+                    onChange={props.onFormChange}
+                  />
+
+                  <textarea
+                    name="description"
+                    placeholder="Describe your service"
+                    value={props.serviceForm.description}
+                    onChange={props.onFormChange}
+                  />
+
+                  <div className="form-actions">
+                    <button type="button" onClick={props.onCancelForm}>
+                      Cancel
+                    </button>
+                    <button type="submit">Post Service</button>
+                  </div>
+                </form>
+              </div>
+            ) : null}
+
+            {props.loading ? <div className="empty-message">Loading services...</div> : null}
+
+            {!props.loading && props.services.length === 0 ? (
+              <div className="empty-message">No services found.</div>
+            ) : null}
+
+            {!props.loading && props.services.length > 0 ? (
+              <div className="services-grid">
+                {props.services.map(function (service) {
+                  return <ServiceCard key={service.id} service={service} />;
+                })}
+              </div>
+            ) : null}
+
+            <button className="plus-button" onClick={props.onOpenForm}>
+              +
+            </button>
+          </div>
+        );
+      }
+
+      function ServiceCard(props) {
+        const service = props.service;
+
+        return (
+          <article className="service-card">
+            <div className="service-card-header">
+              <h2 className="service-title">{service.title}</h2>
+              <div className="service-price">{service.price}</div>
+            </div>
+
+            <div className="service-genre">{service.genre}</div>
+
+            <p className="service-description">{service.description}</p>
+
+            <div className="service-meta">
+              Posted by {service.displayName}
+            </div>
+          </article>
+        );
+      }
+
+      function ProfilePage(props) {
+        const profile = props.profile;
+
+        return (
+          <div className="profile-wrap">
+            <div className="profile-card">
+              {props.loading ? (
+                <div className="empty-message">Loading profile...</div>
+              ) : null}
+
+              {props.error ? <div className="error-message">{props.error}</div> : null}
+
+              {!props.loading && profile ? (
+                <div>
+                  <div className="profile-top">
+                    <div>
+                      <img
+                        className="avatar"
+                        src={profile.avatarUrl || "https://i.pravatar.cc/200"}
+                        alt="Avatar"
+                      />
+                    </div>
+
+                    <div>
+                      <h2 className="profile-name">{profile.displayName}</h2>
+                      <p className="profile-email">{props.user.email}</p>
+                      <p className="profile-bio">
+                        {profile.bio ? profile.bio : "No bio yet. Tap Edit Profile."}
+                      </p>
+
+                      <div className="profile-actions">
+                        <button className="profile-button" onClick={props.onOpenEdit}>
+                          Edit Profile
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {props.editOpen ? (
+                    <form className="auth-form" onSubmit={props.onSaveProfile}>
+                      <input
+                        name="displayName"
+                        placeholder="Display name"
+                        value={props.editForm.displayName}
+                        onChange={props.onEditChange}
+                      />
+
+                      <input
+                        name="avatarUrl"
+                        placeholder="Avatar URL (paste an image link)"
+                        value={props.editForm.avatarUrl}
+                        onChange={props.onEditChange}
+                      />
+
+                      <textarea
+                        name="bio"
+                        placeholder="Bio"
+                        value={props.editForm.bio}
+                        onChange={props.onEditChange}
+                      />
+
+                      <div className="form-actions">
+                        <button type="button" onClick={props.onCancelEdit}>
+                          Cancel
+                        </button>
+                        <button type="submit">Save</button>
+                      </div>
+                    </form>
+                  ) : null}
+
+                  <div className="posts-header">
+                    <h3 style={{ margin: 0 }}>Posts</h3>
+                    <div style={{ color: "#666" }}>0 posts</div>
+                  </div>
+
+                  <div className="posts-grid">
+                    <div className="post-tile">Post</div>
+                    <div className="post-tile">Post</div>
+                    <div className="post-tile">Post</div>
+                    <div className="post-tile">Post</div>
+                    <div className="post-tile">Post</div>
+                    <div className="post-tile">Post</div>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        );
+      }
+
+      function AuthForm(props) {
+        return (
+          <form className="auth-form" onSubmit={props.onSubmit}>
+            <input
+              name="email"
+              placeholder="Email (e.g., haz@colorado.edu)"
+              value={props.formData.email}
+              onChange={props.onChange}
+            />
+
+            <input
+              name="password"
+              placeholder="Password"
+              type="password"
+              value={props.formData.password}
+              onChange={props.onChange}
+            />
+
+            {props.mode === "register" ? (
+              <input
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                type="password"
+                value={props.formData.confirmPassword}
+                onChange={props.onChange}
+              />
+            ) : null}
+
+            <div className="form-actions">
+              <button type="button" onClick={props.onCancel}>
+                Cancel
+              </button>
+              <button type="submit">
+                {props.mode === "login" ? "Login" : "Create account"}
+              </button>
+            </div>
+          </form>
+        );
+      }
+
+      function SectionCard(props) {
+        return (
+          <article className="section-card">
+            <h2 className="section-title">{props.title}</h2>
+            <p className="section-tagline">{props.tagline}</p>
+          </article>
+        );
+      }
+
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+    </script>
+  </body>
+</html>
