@@ -1,29 +1,29 @@
-
-
 -- CUQuest backend
--- iteration 1
+-- iteration 3
 -- vincenzo lindley
--- 2-20-26
+-- 3-11-2026
 
 -- enum 'only these values allowed' 
 -- the database itself prevents invalid states.
 
-DO $$
-BEGIN
-	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname='request_status') THEN 
-	 CREATE TYPE request_status AS ENUM ('open','pending','closed','expired');
-	END IF;
-END;
-$$ LANGUAGE plpgsql;
+Drop table if exists public.messages cascade;
+Drop table if exists public.ratings cascade;
+Drop table if exists public.post_images cascade;
+Drop table if exists public.posts_images cascade;
+Drop table if exists public.posts cascade;
+Drop table if exists public.categories cascade;
+Drop table if exists public.users cascade;
+Drop table if exists public.schools cascade;
+Drop table if exists public.domains cascade;
+
+DROP SCHEMA IF EXISTS third_iteration CASCADE;
+CREATE SCHEMA third_iteration;
+SET search_path TO third_iteration;
+
+DROP TYPE IF EXISTS request_status CASCADE;
+CREATE TYPE request_status AS ENUM ('open', 'pending', 'closed', 'expired');
 
 
-
-CREATE TABLE IF NOT EXISTS schools(
-	school_id BIGSERIAL PRIMARY KEY,
-	school_name TEXT NOT NULL,
-	domain TEXT NOT NULL UNIQUE 
-	-- edu domain constraint is enforced in the users table
-);
 
 CREATE TABLE IF NOT EXISTS users(
 	user_id BIGSERIAL PRIMARY KEY,
@@ -42,14 +42,26 @@ CREATE TABLE IF NOT EXISTS users(
 
 CREATE TABLE IF NOT EXISTS domains (
 	domain_id SMALLSERIAL PRIMARY KEY,
-	domain_name TEXT NOT NULL UNIQUE 
+	domain_name TEXT NOT NULL UNIQUE,
+
+	constraint domains_allowed_ids_chk
+		check (domain_id in (1,2,3)),
+
+	constraint domains_allowed_values_chk
+		check(lower(domain_name) in ('services','social','academic'))
 );
+
+
 
 CREATE TABLE IF NOT EXISTS categories (
 	category_id BIGSERIAL PRIMARY KEY,
 	name TEXT NOT NULL UNIQUE, -- prevent duplicates
 	domain_id SMALLINT NOT NULL,
-	FOREIGN KEY (domain_id) REFERENCES  domains(domain_id)
+
+	constraint categories_domain_fk
+		foreign key (domain_id)
+		references domains(domain_id)
+		on delete restrict
 	
 );
 
@@ -63,80 +75,122 @@ CREATE TABLE IF NOT EXISTS posts (
 	desired_payout NUMERIC(10,2),
 	status request_status NOT NULL DEFAULT 'open',
 	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-	expires_at TIMESTAMPTZ
+	expires_at TIMESTAMPTZ,
+
+	constraint posts_creator_fk
+		foreign key (creator_user_id)
+		references users(user_id)
+		on delete cascade,
+		
+	constraint posts_category_fk
+		foreign key (category_id)
+		references categories(category_id)
+		on delete restrict,
+		
+	constraint posts_payout_nonnegative_check
+		check (desired_payout is null or desired_payout >= 0),
+		
+	constraint posts_expires_after_created_chk
+		check (expires_at is null or expires_at > created_at)
 );
 
 
-CREATE TABLE IF NOT EXISTS posts_images (
+CREATE TABLE IF NOT EXISTS post_images (
 	image_id BIGSERIAL PRIMARY KEY,
-	posts_id BIGINT NOT NULL REFERENCES posts(post_id) ON DELETE CASCADE,
+	post_id BIGINT NOT NULL REFERENCES posts(post_id) ON DELETE CASCADE,
 	image_url TEXT NOT NULL,
-	uploaded_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+	uploaded_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+	constraint post_images_post_fk
+		foreign key (post_id)
+		references posts(post_id)
+		on delete cascade
 );
+
 
 CREATE TABLE IF NOT EXISTS ratings (
 	rating_id BIGSERIAL PRIMARY KEY,
-	post_id BIGINT NOT NULL REFERENCES posts(post_id) ON DELETE CASCADE,
-	rater_user_id BIGINT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-	rated_user_id BIGINT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+	post_id BIGINT NOT NULL,
+	rater_user_id BIGINT NOT NULL,
+	rated_user_id BIGINT NOT NULL,
 	score INT NOT NULL,
 	comment TEXT,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
-	CONSTRAINT ratings_score_chk CHECK (score BETWEEN 1 AND 5),
-	CONSTRAINT ratings_not_self_chk CHECK (rater_user_id <> rated_user_id)
+	constraint ratings_post_fk
+		foreign key (post_id)
+		references posts(post_id)
+		on delete cascade,
+
+	constraint ratings_rated_fk
+		foreign key (rated_user_id)
+		references users(user_id)
+		on delete cascade,
+
+	constraint ratings_rater_fk
+		foreign key (rater_user_id)
+		references users(user_id)
+		on delete cascade,
+
+	constraint ratings_score_chk
+		check (score between 1 and 5),
+		
+	constraint ratings_not_self_chk
+		check (rater_user_id <> rated_user_id)
 );
 
 CREATE TABLE IF NOT EXISTS messages (
 	message_id BIGSERIAL PRIMARY KEY,
-	sender_user_id	BIGINT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-	receiver_user_id BIGINT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-	request_id BIGINT REFERENCES posts(post_id) ON DELETE CASCADE,
+	sender_user_id	BIGINT not null,
+	receiver_user_id BIGINT not null,
+	request_id BIGINT not null,
 	content TEXT NOT NULL,
 	sent_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-	is_read BOOLEAN NOT NULL DEFAULT FALSE
+	is_read BOOLEAN NOT NULL DEFAULT FALSE,
+
+	constraint messages_sender_fk
+		foreign key (sender_user_id)
+		references users(user_id)
+		on delete cascade,
+
+	constraint messages_receiver_fk
+		foreign key (receiver_user_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT messages_request_fk
+        FOREIGN KEY (request_id)
+        REFERENCES posts(post_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT messages_not_self_chk
+        CHECK (sender_user_id <> receiver_user_id),
+
+    CONSTRAINT messages_content_not_blank_chk
+        CHECK (LENGTH(TRIM(content)) > 0)
 );
+
+
+
 
 -- INDEXES FOR FILTERING
 
 CREATE INDEX IF NOT EXISTS idx_posts_creator ON posts(creator_user_id);
 CREATE INDEX IF NOT EXISTS idx_posts_category ON posts(category_id);
 CREATE INDEX IF NOT EXISTS idx_posts_status ON posts(status);
-
-DO $$
-BEGIN
-	if not exists(
-		select 1
-		from pg_constraint
-		where conname = 'categories_domain_fk'
-		) then
-		 alter table categories
-		 add constraint categories_domain_fk
-		 foreign key (domain_id) references domains(domain_id)
-		 on delete restrict;
-	end if;
-end $$;
-
-alter table categories
-alter column domain_id set not null;
+CREATE INDEX IF NOT EXISTS idx_categories_domain_id ON categories(domain_id);
+CREATE INDEX IF NOT EXISTS idx_messages_sender ON messages(sender_user_id);
+CREATE INDEX IF NOT EXISTS idx_messages_receiver ON messages(receiver_user_id);
+CREATE INDEX IF NOT EXISTS idx_ratings_rated_user ON ratings(rated_user_id);
+CREATE INDEX IF NOT EXISTS idx_post_images_post_id ON post_images(post_id);
 
 
-create unique index if not exists uq_categories_domain_name
-on categories(domain_id, name);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_ratings_post_rater
+ON ratings(post_id, rater_user_id);
 
-alter table domains
-add constraint domains_allowed_values
-check (lower(domain_name) in ('services','social','academic'));
-
-alter table domains
-add constraint domains_allowed_ids
-check (domain_id in (1,2,3));
-
-
--- Fully normalized relational database
--- Foreign key integrity
--- Cascading deletes
--- Data validation
--- Enum enforcement
--- Automatic timestamps
--- Web-app ready
+-- canonical domain rows
+INSERT INTO domains (domain_id, domain_name) VALUES
+    (1, 'services'),
+    (2, 'social'),
+    (3, 'academic')
+ON CONFLICT (domain_id) DO NOTHING;
