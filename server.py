@@ -132,6 +132,8 @@ class RatingCreate(BaseModel):
     comment: Optional[str] = None
 
 
+
+
 class AppDB:
     def __init__(self):
         self.engine = engine
@@ -163,7 +165,7 @@ class AppDB:
             "is_active": bool(row.is_active),
         }
 
-    def get_user_by_id(self, user_id, int):
+    def get_user_by_id(self, user_id: int):
         with self.engine.connect() as conn:
             row = conn.execute(
                 select(users_table).where(users_table.c.user_id == user_id)
@@ -215,6 +217,9 @@ class AppDB:
         first_name = payload.first_name.strip()
         last_name = payload.last_name.strip()
 
+        if not first_name or not last_name:
+            return{"error": "First and last name are required."}
+
         if len(password) < 6:
             return {"error": "Password must be at least 6 characters."}
         if not email.endswith(".edu"):
@@ -239,8 +244,8 @@ class AppDB:
             return {"error": "Email already exists."}
 
         user = self.get_user_by_id(user_id)
-        token = self.create_session(user_id)
-        return {"message": "user created", "token": token, "user": user}
+        session = self.create_session(user_id)
+        return {"message": "user created", "token": session["token"], "user": user}
 
     def login(self, payload):
         row = self.get_user_row_by_email(payload.email)
@@ -248,8 +253,8 @@ class AppDB:
             return {"error": "Invalid email or password."}
         if row.password_hash != self.hash_password(payload.password):
             return {"error": "Invalid email or password."}
-        token = self.create_session(row.user_id)
-        return {"token": token, "user": self.user_to_dict(row)}
+        session = self.create_session(row.user_id)
+        return {"token": session["token"], "user": self.user_to_dict(row)}
 
     def logout(self, token):
         with self.engine.begin() as conn:
@@ -269,9 +274,13 @@ class AppDB:
             for row in rows
         ]
 
-    def list_categories(self):
+    def list_categories(self, domain_id=None):
+        query = select(categories_table).order_by(categories_table.c.category_id)
+
+        if domain_id is not None:
+            query = query.where(categories_table.c.domain_id == domain_id)
         with self.engine.connect() as conn:
-            rows = conn.execute(select(categories_table).order_by(categories_table.c.category_id)).fetchall()
+            rows = conn.execute(query).fetchall()
         return [
             {
                 "category_id": row.category_id,
@@ -355,12 +364,15 @@ class AppDB:
             "images": self.get_post_images(row.post_id),
         }
 
-    def list_posts(self):
+    def list_posts(self, category_id=None):
+        query = select(posts_table.c.post_id).order_by(
+            posts_table.c.created_at.desc(),
+            posts_table.c.post_id.desc(),
+        )
+        if category_id is not None:
+            query = query.where(posts_table.c.category_id == category_id)
         with self.engine.connect() as conn:
-            rows = conn.execute(
-                select(posts_table.c.post_id)
-                .order_by(posts_table.c.created_at.desc(), posts_table.c.post_id.desc())
-            ).fetchall()
+            rows = conn.execute(query).fetchall()
         return [self.get_post_details(row.post_id) for row in rows]
 
     def create_post(self, payload):
@@ -562,8 +574,8 @@ def me(token: str):
 
 
 @app.post("/logout")
-def logout(token: str):
-    return db.logout(token)
+def logout(payload: LogoutRequest):
+    return db.logout(payload.token)
 
 
 @app.get("/domains")
@@ -572,13 +584,13 @@ def list_domains():
 
 
 @app.get("/categories")
-def list_categories():
-    return {"categories": db.list_categories()}
+def list_categories(domain_id:int | None = None):
+    return {"categories": db.list_categories(domain_id)}
 
 
 @app.get("/posts")
-def list_posts():
-    return {"posts": db.list_posts()}
+def list_posts(category_id: int | None = None):
+    return {"posts": db.list_posts(category_id)}
 
 
 @app.post("/posts")

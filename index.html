@@ -140,10 +140,16 @@
       }
 
       function StudentQuest() {
+        const [domains,setDomains] = React.useState([]);
+        const [selectedDomain, setSelectedDomain] = React.useState(null);
         const [user, setUser] = React.useState(null);
         const [token, setToken] = React.useState("");
         const [mode, setMode] = React.useState("login");
         const [error, setError] = React.useState("");
+        const [categories, setCategories] = React.useState([]);
+        const [selectedCategory, setSelectedCategory] = React.useState(null);
+        const [posts,setPosts] = React.useState([]);
+        const [selectedPost, setSelectedPost] = React.useState(null);
 
         const [formOpen, setFormOpen] = React.useState(true);
 
@@ -151,27 +157,65 @@
           email: "",
           password: "",
           confirmPassword: "",
+          first_name: "",
+          last_name: "",
         });
 
-        React.useEffect(function () {
-          const savedToken = localStorage.getItem("studentquest_token");
+        React.useEffect(function (){
+          if (!selectedCategory) return;
 
-          if (savedToken) {
-            fetch("http://localhost:8000/me?token=" + savedToken)
-              .then(function (response) {
-                return response.json();
-              })
-              .then(function (data) {
-                if (data.error) {
-                  localStorage.removeItem("studentquest_token");
-                } else {
-                  setToken(savedToken);
-                  setUser(data);
-                  setFormOpen(false);
-                }
-              });
-          }
-        }, []);
+          fetch("http://localhost:8000/posts?category_id=" + selectedCategory.category_id)
+            .then(function(response){
+              return response.json();
+            })
+            .then(function (data){
+              setPosts(data.posts || []);
+            });
+
+        }, [selectedCategory]);
+
+        React.useEffect(function (){
+          const savedToken = localStorage.getItem("studentquest_token");
+          if (!savedToken) return;
+
+          fetch("http://localhost:8000/me?token=" + savedToken)
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              if (data.error){
+                localStorage.removeItem("studentquest_token");
+              } else{
+                setToken(savedToken);
+                setUser(data.user);
+                setFormOpen(false);
+              }
+            });
+          }, []);
+
+        React.useEffect(function () {
+          if (!user) return;
+
+  
+          fetch("http://localhost:8000/domains")
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              setDomains(data.domains || []);
+            });
+        }, [user]);
+
+        React.useEffect(function () {
+          if(!selectedDomain) return;
+          fetch("http://localhost:8000/categories?domain_id=" + selectedDomain.domain_id)
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              setCategories(data.categories || []);
+            });
+        }, [selectedDomain]);
 
         function handleOpenForm() {
           setFormOpen(true);
@@ -186,6 +230,8 @@
             email: "",
             password: "",
             confirmPassword: "",
+            first_name: "",
+            last_name: "",
           });
         }
 
@@ -197,6 +243,8 @@
             email: "",
             password: "",
             confirmPassword: "",
+            first_name: "",
+            last_name: "",
           });
 
           setFormOpen(true);
@@ -222,6 +270,11 @@
           }
 
           if (mode === "register") {
+            if (!formData.first_name.trim() || !formData.last_name.trim()) {
+              setError("First and last name are required.");
+              return;
+            }
+
             if (formData.password.length < 6) {
               setError("Password must be at least 6 characters.");
               return;
@@ -233,9 +286,14 @@
             }
           }
 
-          const payload = {
+          const payload = mode == "login" ? {
             email: cleanEmail,
             password: formData.password,
+          }:{
+            email:cleanEmail,
+            password: formData.password,
+            first_name: formData.first_name.trim(),
+            last_name: formData.last_name.trim(),
           };
 
           const endpoint = mode === "login" ? "login" : "register";
@@ -262,6 +320,8 @@
                 email: "",
                 password: "",
                 confirmPassword: "",
+                first_name: "",
+                last_name: "",
               });
 
               setFormOpen(false);
@@ -284,11 +344,15 @@
               setError("");
               setMode("login");
               setFormOpen(true);
+              setSelectedDomain(null);
+              setCategories([]);
 
               setFormData({
                 email: "",
                 password: "",
                 confirmPassword: "",
+                first_name: "",
+                last_name: "",
               });
             });
         }
@@ -304,19 +368,71 @@
                 </div>
 
                 <div className="section-list">
-                  <SectionCard
-                    title="Social"
-                    tagline="Post, meet people, and connect with other students."
-                  />
-                  <SectionCard
-                    title="Services"
-                    tagline="Post services or complete services for money."
-                  />
-                  <SectionCard
-                    title="Academics"
-                    tagline="Create rooms and study with people on the same tasks."
-                  />
+                  {domains.map(function(domain){
+                    return(
+                      <SectionCard
+                        key={domain.domain_id}
+                        title={domain.domain_name}
+                        tagline = "Select"
+                        onClick={function() {
+                          setSelectedDomain(domain);
+                          setSelectedCategory(null);
+                          setCategories([]);
+                        }}
+                      />
+                    );
+                  })}
                 </div>
+
+
+                {selectedDomain ? (
+                  <div style={{ padding: "0 16px 16px 16px" }}>
+                    <h2 style={{ marginTop: 0 }}>
+                      {selectedDomain.domain_name} categories
+                    </h2>
+
+                    <div className="section-list">
+                      {categories.map(function (category) {
+                        return (
+                          <SectionCard
+                            key={category.category_id}
+                            title={category.name}
+                            tagline="Select category"
+                            onClick= {function () {
+                              setSelectedCategory(category);
+                            }}
+                          />
+                        );
+                    })}
+                  </div>
+                </div>
+                ) : null}
+
+                {selectedCategory ? (
+                  <div style={{padding: "0 16px 16px 16px" }}>
+                    <h2 style={{ marginTop: 0 }}>{selectedCategory.name} posts</h2>
+                    {posts.length === 0 ? (
+                      <div className="empty-message">No posts in this category yet. </div>
+                    ) : (
+                      <div className="section-list">
+                        {posts.map(function (post) {
+                          return(
+                            <article key={post.post_id} className="section-card">
+                              <h2 className="section-title"> {post.title}</h2>
+                              <p className="section-tagline"> {post.description}</p>
+                              <p><strong>Status:</strong> {post.status}</p>
+                              <p>
+                                <strong>Price:</strong>{" "}
+                                {post.desired_payout == null ? "Not listed" : "$" + post.desired_payout}
+                              </p>
+                            </article>
+                          );   
+                        })}
+                    </div>  
+                  )} 
+                </div>
+              ): null}
+
               </div>
             ) : (
               <div>
@@ -373,6 +489,25 @@
               onChange={props.onChange}
             />
 
+    
+            {props.mode === "register" ? (
+              <input
+                name="first_name"
+                placeholder="First name"
+                value={props.formData.first_name}
+                onChange={props.onChange}
+              />
+            ) : null}
+
+            {props.mode === "register" ? (
+              <input
+                name="last_name"
+                placeholder="Last name"
+                value={props.formData.last_name}
+                onChange={props.onChange}
+              />
+            ) : null}
+
             <input
               name="password"
               placeholder="Password"
@@ -380,6 +515,7 @@
               value={props.formData.password}
               onChange={props.onChange}
             />
+
 
             {props.mode === "register" ? (
               <input
@@ -390,6 +526,8 @@
                 onChange={props.onChange}
               />
             ) : null}
+
+            
 
             <div className="form-actions">
               <button type="button" onClick={props.onCancel}>
@@ -405,7 +543,7 @@
 
       function SectionCard(props) {
         return (
-          <article className="section-card">
+          <article className="section-card" onClick={props.onClick}>
             <h2 className="section-title">{props.title}</h2>
             <p className="section-tagline">{props.tagline}</p>
           </article>
