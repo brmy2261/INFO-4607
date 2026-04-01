@@ -41,18 +41,11 @@
         gap: 8px;
       }
 
-      .auth-form input,
-      .auth-form textarea,
-      .auth-form select {
+      .auth-form input {
         padding: 8px;
         border-radius: 4px;
         border: 1px solid #ccc;
         font: inherit;
-      }
-
-      .auth-form textarea {
-        min-height: 80px;
-        resize: vertical;
       }
 
       .form-actions {
@@ -104,7 +97,6 @@
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 16px;
         padding: 16px;
-        padding-bottom: 90px;
       }
 
       .section-card {
@@ -126,236 +118,201 @@
         color: #555;
       }
 
-      .tabbar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
+      .post-form {
+        max-width: 600px;
+        margin: 0 16px 24px 16px;
+        padding: 16px;
         background: #ffffff;
-        border-top: 1px solid #ddd;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0;
-        z-index: 20;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
       }
 
-      .tab-button {
-        padding: 12px 10px;
-        border: none;
-        background: transparent;
-        cursor: pointer;
+      .post-form input,
+      .post-form textarea {
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
         font: inherit;
       }
 
-      .tab-button.active {
-        font-weight: 700;
+      .post-form textarea {
+        resize: vertical;
+        min-height: 80px;
       }
 
-      .profile-wrap {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 16px;
-        padding-bottom: 90px;
+      .post-form-toggle {
+        margin: 0 16px 16px 16px;
       }
 
-      .profile-card {
-        background: #ffffff;
-        border-radius: 12px;
-        padding: 16px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      .jitsi-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
       }
 
-      .profile-top {
-        display: grid;
-        grid-template-columns: 110px 1fr;
-        gap: 16px;
+      .jitsi-overlay-header {
+        display: flex;
         align-items: center;
+        justify-content: space-between;
+        padding: 10px 16px;
+        background: #1a1a1a;
+        color: #fff;
+        flex-shrink: 0;
       }
 
-      .avatar {
-        width: 96px;
-        height: 96px;
-        border-radius: 999px;
-        object-fit: cover;
-        border: 1px solid #ddd;
-        background: #f2f2f2;
+      .jitsi-overlay-header h3 {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .jitsi-container {
+        flex: 1;
+        width: 100%;
+      }
+
+      .join-call-button {
+        padding: 8px 14px;
+        border-radius: 6px;
+        border: none;
+        background: #2d8a4e;
+        color: #fff;
+        cursor: pointer;
+        font: inherit;
+        font-weight: 600;
+      }
+
+      .join-call-button:hover {
+        background: #236e3e;
+      }
+
+      .delete-post-button {
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: none;
+        background: #c0392b;
+        color: #fff;
+        cursor: pointer;
+        font: inherit;
+        font-size: 0.85rem;
+        align-self: flex-start;
+      }
+
+      .delete-post-button:hover {
+        background: #a93226;
+      }
+
+      .profile-panel {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 0 0 40px 0;
+      }
+
+      .profile-header {
+        background: #ffffff;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 40px 32px 24px 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 8px;
+      }
+
+      .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #111;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 8px;
       }
 
       .profile-name {
         margin: 0;
-        font-size: 1.2rem;
-      }
-
-      .profile-email {
-        margin: 4px 0 0 0;
-        color: #666;
-        font-size: 0.95rem;
-      }
-
-      .profile-bio {
-        margin: 10px 0 0 0;
-        color: #333;
-        white-space: pre-wrap;
-      }
-
-      .profile-actions {
-        display: flex;
-        gap: 8px;
-        margin-top: 12px;
-        flex-wrap: wrap;
-      }
-
-      .profile-button {
-        padding: 10px 12px;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        background: #fff;
-        cursor: pointer;
-        font: inherit;
-      }
-
-      .posts-header {
-        margin-top: 16px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .posts-grid {
-        margin-top: 12px;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 10px;
-      }
-
-      .post-tile {
-        background: #f3f3f3;
-        border: 1px solid #e1e1e1;
-        border-radius: 10px;
-        height: 140px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #777;
-        font-size: 0.95rem;
-      }
-
-      .services-wrap {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 16px;
-        padding-bottom: 110px;
-      }
-
-      .services-topbar {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        margin-bottom: 16px;
-        flex-wrap: wrap;
-      }
-
-      .services-search {
-        flex: 1;
-        min-width: 240px;
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        background: #fff;
-        font: inherit;
-      }
-
-      .services-search-button,
-      .services-clear-button {
-        padding: 12px 14px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        background: #fff;
-        cursor: pointer;
-        font: inherit;
-      }
-
-      .services-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 16px;
-      }
-
-      .service-card {
-        background: #fff;
-        border-radius: 12px;
-        padding: 14px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .service-card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 8px;
-      }
-
-      .service-title {
-        margin: 0;
-        font-size: 1.05rem;
-      }
-
-      .service-price {
-        white-space: nowrap;
+        font-size: 1.4rem;
         font-weight: 700;
       }
 
-      .service-genre {
-        display: inline-block;
-        width: fit-content;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: #f0f0f0;
-        font-size: 0.9rem;
-      }
-
-      .service-description {
+      .profile-bio {
         margin: 0;
-        color: #444;
-        white-space: pre-wrap;
+        color: #555;
+        font-size: 0.95rem;
       }
 
-      .service-meta {
-        color: #666;
-        font-size: 0.92rem;
+      .profile-meta {
+        margin: 0;
+        color: #999;
+        font-size: 0.8rem;
       }
 
-      .plus-button {
-        position: fixed;
-        right: 18px;
-        bottom: 76px;
-        width: 58px;
-        height: 58px;
-        border-radius: 999px;
-        border: none;
-        background: #111;
-        color: #fff;
-        font-size: 2rem;
-        line-height: 1;
-        cursor: pointer;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-        z-index: 25;
+      .profile-posts-section {
+        padding: 24px 16px 0 16px;
       }
 
-      .service-form-card {
-        max-width: 700px;
-        margin: 0 auto 16px auto;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      .profile-posts-heading {
+        margin: 0 0 16px 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .profile-post-card {
+        background: #ffffff;
+        border-radius: 8px;
         padding: 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
       }
 
-      .service-form-title {
-        margin: 0 0 12px 0;
+      .profile-post-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .profile-post-title {
+        font-weight: 600;
+        font-size: 1rem;
+        margin: 0;
+      }
+
+      .profile-post-meta {
+        font-size: 0.8rem;
+        color: #999;
+        margin: 0;
+      }
+
+      .profile-empty {
+        text-align: center;
+        color: #aaa;
+        padding: 40px 0;
+        font-size: 0.95rem;
+      }
+
+      .profile-close-bar {
+        padding: 16px 32px 0 32px;
+        display: flex;
+        justify-content: flex-end;
       }
     </style>
   </head>
@@ -363,13 +320,12 @@
   <body>
     <div id="root"></div>
 
+    <script src="https://meet.jit.si/external_api.js"></script>
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script type="text/babel">
-      const API_URL = "http://localhost:8000";
-
       function MyApp() {
         return (
           <div>
@@ -382,135 +338,190 @@
       }
 
       function StudentQuest() {
+        const [domains,setDomains] = React.useState([]);
+        const [selectedDomain, setSelectedDomain] = React.useState(null);
         const [user, setUser] = React.useState(null);
         const [token, setToken] = React.useState("");
         const [mode, setMode] = React.useState("login");
         const [error, setError] = React.useState("");
+        const [categories, setCategories] = React.useState([]);
+        const [selectedCategory, setSelectedCategory] = React.useState(null);
+        const [posts,setPosts] = React.useState([]);
+        const [selectedPost, setSelectedPost] = React.useState(null);
+
+        const [showProfile, setShowProfile] = React.useState(false);
+        const [userPosts, setUserPosts] = React.useState([]);
+
+        function handleOpenProfile() {
+          fetch("http://localhost:8000/users/" + user.user_id + "/posts")
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+              setUserPosts(data.posts || []);
+            })
+            .catch(function () { setUserPosts([]); });
+          setShowProfile(true);
+          setSelectedDomain(null);
+          setSelectedCategory(null);
+        }
+
+        const [activeCall, setActiveCall] = React.useState(null);
+
+        function handleJoinCall(post) {
+          const roomName = "cuquest-post-" + post.post_id + "-" + post.title.toLowerCase().replace(/[^a-z0-9]/g, "");
+          setActiveCall({ roomName: roomName, postTitle: post.title });
+        }
+
+        function handleLeaveCall() {
+          setActiveCall(null);
+        }
+
+        function handleDeletePost(post_id) {
+          fetch("http://localhost:8000/posts/" + post_id, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: token }),
+          })
+            .then(function (response) { return response.json(); })
+            .then(function (data) {
+              if (data.error) {
+                alert(data.error);
+                return;
+              }
+              setPosts(function (prev) {
+                return prev.filter(function (p) { return p.post_id !== post_id; });
+              });
+            });
+        }
+
+        const [showCreatePost, setShowCreatePost] = React.useState(false);
+        const [createPostError, setCreatePostError] = React.useState("");
+        const [createPostData, setCreatePostData] = React.useState({
+          title: "",
+          description: "",
+          desired_payout: "",
+          expires_at: "",
+        });
+
+        function handleCreatePostChange(event) {
+          setCreatePostData({
+            ...createPostData,
+            [event.target.name]: event.target.value,
+          });
+        }
+
+        function handleCreatePostSubmit() {
+          setCreatePostError("");
+          const title = createPostData.title.trim();
+          const description = createPostData.description.trim() || title;
+          if (!title || !description) {
+            setCreatePostError("Title and description are required.");
+            return;
+          }
+          const payload = {
+            token: token,
+            category_id: selectedCategory.category_id,
+            title: title,
+            description: description,
+            desired_payout: createPostData.desired_payout !== "" ? parseFloat(createPostData.desired_payout) : null,
+            expires_at: (function() {
+              if (createPostData.expires_at === "") return null;
+              var d = new Date(createPostData.expires_at);
+              return d.toISOString();
+            })(),
+          };
+          if (createPostData.expires_at !== "" && new Date(createPostData.expires_at) <= new Date()) {
+            setCreatePostError("Expiry date must be in the future.");
+            return;
+          }
+          fetch("http://localhost:8000/posts", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          })
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              if (data.error) {
+                setCreatePostError(data.error);
+                return;
+              }
+              setPosts(function (prev) {
+                return [data.post].concat(prev);
+              });
+              setShowCreatePost(false);
+              setCreatePostData({ title: "", description: "", desired_payout: "", expires_at: "" });
+            });
+        }
 
         const [formOpen, setFormOpen] = React.useState(true);
-        const [activeTab, setActiveTab] = React.useState("social");
-
-        const [profile, setProfile] = React.useState(null);
-        const [profileLoading, setProfileLoading] = React.useState(false);
-        const [profileError, setProfileError] = React.useState("");
-        const [editOpen, setEditOpen] = React.useState(false);
-
-        const [editForm, setEditForm] = React.useState({
-          displayName: "",
-          avatarUrl: "",
-          bio: "",
-        });
 
         const [formData, setFormData] = React.useState({
           email: "",
           password: "",
           confirmPassword: "",
+          first_name: "",
+          last_name: "",
         });
 
-        const [services, setServices] = React.useState([]);
-        const [servicesLoading, setServicesLoading] = React.useState(false);
-        const [servicesError, setServicesError] = React.useState("");
-        const [serviceSearch, setServiceSearch] = React.useState("");
-        const [serviceFormOpen, setServiceFormOpen] = React.useState(false);
-        const [serviceForm, setServiceForm] = React.useState({
-          title: "",
-          genre: "",
-          description: "",
-          price: "",
-        });
+        React.useEffect(function (){
+          if (!selectedCategory) return;
 
-        React.useEffect(function () {
+          fetch("http://localhost:8000/posts?category_id=" + selectedCategory.category_id)
+            .then(function(response){
+              return response.json();
+            })
+            .then(function (data){
+              setPosts(data.posts || []);
+            })
+            .catch(function() {
+              setPosts([]);
+            });
+
+        }, [selectedCategory]);
+
+        React.useEffect(function (){
           const savedToken = localStorage.getItem("studentquest_token");
+          if (!savedToken) return;
 
-          if (savedToken) {
-            fetch(API_URL + "/me?token=" + savedToken)
-              .then(function (response) {
-                return response.json();
-              })
-              .then(function (data) {
-                if (data.error) {
-                  localStorage.removeItem("studentquest_token");
-                } else {
-                  setToken(savedToken);
-                  setUser(data);
-                  setFormOpen(false);
-                }
-              });
-          }
-        }, []);
-
-        React.useEffect(
-          function () {
-            if (!user) {
-              return;
-            }
-
-            if (activeTab !== "profile") {
-              return;
-            }
-
-            setProfileLoading(true);
-            setProfileError("");
-
-            fetch(API_URL + "/profile?token=" + token)
-              .then(function (response) {
-                return response.json();
-              })
-              .then(function (data) {
-                setProfileLoading(false);
-
-                if (data.error) {
-                  setProfileError(data.error);
-                  return;
-                }
-
-                setProfile(data);
-              });
-          },
-          [activeTab, user, token]
-        );
-
-        React.useEffect(
-          function () {
-            if (!user) {
-              return;
-            }
-
-            if (activeTab !== "services") {
-              return;
-            }
-
-            loadServices(serviceSearch);
-          },
-          [activeTab, user]
-        );
-
-        function loadServices(searchValue) {
-          setServicesLoading(true);
-          setServicesError("");
-
-          const cleanSearch = (searchValue || "").trim();
-          let url = API_URL + "/services";
-
-          if (cleanSearch !== "") {
-            url += "?genre=" + encodeURIComponent(cleanSearch);
-          }
-
-          fetch(url)
+          fetch("http://localhost:8000/me?token=" + savedToken)
             .then(function (response) {
               return response.json();
             })
             .then(function (data) {
-              setServicesLoading(false);
-
-              if (data.error) {
-                setServicesError(data.error);
-                return;
+              if (data.error){
+                localStorage.removeItem("studentquest_token");
+              } else{
+                setToken(savedToken);
+                setUser(data.user);
+                setFormOpen(false);
               }
-
-              setServices(data);
             });
-        }
+          }, []);
+
+        React.useEffect(function () {
+          if (!user) return;
+
+  
+          fetch("http://localhost:8000/domains")
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              setDomains(data.domains || []);
+            });
+        }, [user]);
+
+        React.useEffect(function () {
+          if(!selectedDomain) return;
+          fetch("http://localhost:8000/categories?domain_id=" + selectedDomain.domain_id)
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              setCategories(data.categories || []);
+            });
+        }, [selectedDomain]);
 
         function handleOpenForm() {
           setFormOpen(true);
@@ -525,6 +536,8 @@
             email: "",
             password: "",
             confirmPassword: "",
+            first_name: "",
+            last_name: "",
           });
         }
 
@@ -536,6 +549,8 @@
             email: "",
             password: "",
             confirmPassword: "",
+            first_name: "",
+            last_name: "",
           });
 
           setFormOpen(true);
@@ -561,6 +576,11 @@
           }
 
           if (mode === "register") {
+            if (!formData.first_name.trim() || !formData.last_name.trim()) {
+              setError("First and last name are required.");
+              return;
+            }
+
             if (formData.password.length < 6) {
               setError("Password must be at least 6 characters.");
               return;
@@ -572,14 +592,19 @@
             }
           }
 
-          const payload = {
+          const payload = mode == "login" ? {
             email: cleanEmail,
             password: formData.password,
+          }:{
+            email:cleanEmail,
+            password: formData.password,
+            first_name: formData.first_name.trim(),
+            last_name: formData.last_name.trim(),
           };
 
           const endpoint = mode === "login" ? "login" : "register";
 
-          fetch(API_URL + "/" + endpoint, {
+          fetch("http://localhost:8000/" + endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
@@ -601,15 +626,16 @@
                 email: "",
                 password: "",
                 confirmPassword: "",
+                first_name: "",
+                last_name: "",
               });
 
-              setActiveTab("social");
               setFormOpen(false);
             });
         }
 
         function handleLogout() {
-          fetch(API_URL + "/logout", {
+          fetch("http://localhost:8000/logout", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ token: token }),
@@ -624,252 +650,219 @@
               setError("");
               setMode("login");
               setFormOpen(true);
-              setActiveTab("social");
-              setProfile(null);
-              setEditOpen(false);
-              setServices([]);
-              setServiceFormOpen(false);
-              setServiceSearch("");
+              setSelectedDomain(null);
+              setCategories([]);
 
               setFormData({
                 email: "",
                 password: "",
                 confirmPassword: "",
+                first_name: "",
+                last_name: "",
               });
             });
-        }
-
-        function handleTab(tabName) {
-          setActiveTab(tabName);
-          setEditOpen(false);
-          setProfileError("");
-        }
-
-        function handleOpenEdit() {
-          if (!profile) {
-            return;
-          }
-
-          setEditForm({
-            displayName: profile.displayName || "",
-            avatarUrl: profile.avatarUrl || "",
-            bio: profile.bio || "",
-          });
-          setEditOpen(true);
-          setProfileError("");
-        }
-
-        function handleCancelEdit() {
-          setEditOpen(false);
-          setProfileError("");
-        }
-
-        function handleEditChange(event) {
-          const nextEditForm = {
-            ...editForm,
-            [event.target.name]: event.target.value,
-          };
-          setEditForm(nextEditForm);
-        }
-
-        function handleSaveProfile(event) {
-          event.preventDefault();
-          setProfileError("");
-
-          const payload = {
-            token: token,
-            profile: {
-              displayName: editForm.displayName,
-              avatarUrl: editForm.avatarUrl,
-              bio: editForm.bio,
-            },
-          };
-
-          fetch(API_URL + "/profile", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          })
-            .then(function (response) {
-              return response.json();
-            })
-            .then(function (data) {
-              if (data.error) {
-                setProfileError(data.error);
-                return;
-              }
-
-              setProfile(data);
-              setEditOpen(false);
-            });
-        }
-
-        function handleServiceSearchChange(event) {
-          setServiceSearch(event.target.value);
-        }
-
-        function handleServiceSearch(event) {
-          event.preventDefault();
-          loadServices(serviceSearch);
-        }
-
-        function handleClearServiceSearch() {
-          setServiceSearch("");
-          loadServices("");
-        }
-
-        function handleOpenServiceForm() {
-          setServiceFormOpen(true);
-          setServicesError("");
-        }
-
-        function handleCancelServiceForm() {
-          setServiceFormOpen(false);
-          setServicesError("");
-          setServiceForm({
-            title: "",
-            genre: "",
-            description: "",
-            price: "",
-          });
-        }
-
-        function handleServiceFormChange(event) {
-          const nextServiceForm = {
-            ...serviceForm,
-            [event.target.name]: event.target.value,
-          };
-          setServiceForm(nextServiceForm);
-        }
-
-        function handleCreateService(event) {
-          event.preventDefault();
-          setServicesError("");
-
-          const payload = {
-            token: token,
-            service: {
-              title: serviceForm.title,
-              genre: serviceForm.genre,
-              description: serviceForm.description,
-              price: serviceForm.price,
-            },
-          };
-
-          fetch(API_URL + "/services", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          })
-            .then(function (response) {
-              return response.json();
-            })
-            .then(function (data) {
-              if (data.error) {
-                setServicesError(data.error);
-                return;
-              }
-
-              setServiceForm({
-                title: "",
-                genre: "",
-                description: "",
-                price: "",
-              });
-
-              setServiceFormOpen(false);
-              loadServices(serviceSearch);
-            });
-        }
-
-        function renderLoggedInContent() {
-          if (activeTab === "social") {
-            return (
-              <div className="section-list">
-                <SectionCard
-                  title="Social"
-                  tagline="Post, meet people, and connect with other students."
-                />
-                <SectionCard
-                  title="Social feed"
-                  tagline="Next step: a feed of student posts."
-                />
-                <SectionCard
-                  title="Messages"
-                  tagline="Next step: DMs and group chats."
-                />
-              </div>
-            );
-          }
-
-          if (activeTab === "services") {
-            return (
-              <ServicesPage
-                services={services}
-                loading={servicesLoading}
-                error={servicesError}
-                searchValue={serviceSearch}
-                onSearchChange={handleServiceSearchChange}
-                onSearchSubmit={handleServiceSearch}
-                onClearSearch={handleClearServiceSearch}
-                formOpen={serviceFormOpen}
-                serviceForm={serviceForm}
-                onOpenForm={handleOpenServiceForm}
-                onCancelForm={handleCancelServiceForm}
-                onFormChange={handleServiceFormChange}
-                onCreateService={handleCreateService}
-              />
-            );
-          }
-
-          if (activeTab === "academic") {
-            return (
-              <div className="section-list">
-                <SectionCard
-                  title="Academics"
-                  tagline="Create rooms and study with people on the same tasks."
-                />
-                <SectionCard
-                  title="Open rooms"
-                  tagline="Next step: room list + join button."
-                />
-                <SectionCard
-                  title="Create a room"
-                  tagline="Next step: room creation form."
-                />
-              </div>
-            );
-          }
-
-          return (
-            <ProfilePage
-              user={user}
-              profile={profile}
-              loading={profileLoading}
-              error={profileError}
-              editOpen={editOpen}
-              editForm={editForm}
-              onOpenEdit={handleOpenEdit}
-              onCancelEdit={handleCancelEdit}
-              onEditChange={handleEditChange}
-              onSaveProfile={handleSaveProfile}
-            />
-          );
         }
 
         return (
           <div>
             {user ? (
               <div>
-                <div style={{ padding: "16px 24px", textAlign: "right" }}>
+                {activeCall ? (
+                  <JitsiCall
+                    roomName={activeCall.roomName}
+                    postTitle={activeCall.postTitle}
+                    displayName={user.first_name + " " + user.last_name}
+                    onLeave={handleLeaveCall}
+                  />
+                ) : null}
+
+                <div style={{ padding: "16px 24px", display: "flex", justifyContent: "flex-end", gap: "8px" }}>
+                  <button className="mode-button" onClick={handleOpenProfile}>
+                    👤 Profile
+                  </button>
                   <button className="mode-button" onClick={handleLogout}>
                     Logout
                   </button>
                 </div>
 
-                {renderLoggedInContent()}
+                {showProfile ? (
+                  <div className="profile-panel">
+                    <div className="profile-close-bar">
+                      <button className="mode-button" onClick={function () { setShowProfile(false); }}>
+                        ← Back
+                      </button>
+                    </div>
+                    <div className="profile-header">
+                      <div className="profile-avatar">
+                        {user.first_name.charAt(0).toUpperCase()}
+                      </div>
+                      <h2 className="profile-name">{user.first_name} {user.last_name}</h2>
+                      <p className="profile-bio">{user.email}</p>
+                      <p className="profile-meta">Member since {new Date(user.created_at).toLocaleDateString()}</p>
+                    </div>
+                    <div className="profile-posts-section">
+                      <p className="profile-posts-heading">Posts</p>
+                      {userPosts.length === 0 ? (
+                        <p className="profile-empty">User has not posted.</p>
+                      ) : (
+                        userPosts.map(function (p) {
+                          return (
+                            <div key={p.post_id} className="profile-post-card">
+                              <div className="profile-post-info">
+                                <p className="profile-post-title">{p.title}</p>
+                                <p className="profile-post-meta">{p.category_name} · {p.domain_name} · {p.status}</p>
+                              </div>
+                              <button
+                                className="delete-post-button"
+                                onClick={function () {
+                                  if (window.confirm("Delete this post?")) {
+                                    handleDeletePost(p.post_id);
+                                    setUserPosts(function (prev) {
+                                      return prev.filter(function (x) { return x.post_id !== p.post_id; });
+                                    });
+                                  }
+                                }}
+                              >
+                                🗑
+                              </button>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  </div>
+                ) : null}
 
-                <TabBar activeTab={activeTab} onTab={handleTab} />
+                {!showProfile ? (
+                <div className="section-list">
+                  {domains.map(function(domain){
+                    return(
+                      <SectionCard
+                        key={domain.domain_id}
+                        title={domain.domain_name}
+                        tagline = "Select"
+                        onClick={function() {
+                          setSelectedDomain(domain);
+                          setSelectedCategory(null);
+                          setCategories([]);
+                          setShowProfile(false);
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+                ) : null}
+
+
+                {!showProfile && selectedDomain ? (
+                  <div style={{ padding: "0 16px 16px 16px" }}>
+                    <h2 style={{ marginTop: 0 }}>
+                      {selectedDomain.domain_name} categories
+                    </h2>
+
+                    <div className="section-list">
+                      {categories.map(function (category) {
+                        return (
+                          <SectionCard
+                            key={category.category_id}
+                            title={category.name}
+                            tagline="Select category"
+                            onClick= {function () {
+                              setSelectedCategory(category);
+                            }}
+                          />
+                        );
+                    })}
+                  </div>
+                </div>
+                ) : null}
+
+                {!showProfile && selectedCategory ? (
+                  <div style={{padding: "0 16px 16px 16px" }}>
+                    <h2 style={{ marginTop: 0 }}>{selectedCategory.name} posts</h2>
+
+                    <div className="post-form-toggle">
+                      <button
+                        className="mode-button"
+                        onClick={function () {
+                          setShowCreatePost(function (prev) { return !prev; });
+                          setCreatePostError("");
+                        }}
+                      >
+                        {showCreatePost ? "Cancel" : "+ Create Post"}
+                      </button>
+                    </div>
+
+                    {showCreatePost ? (
+                      selectedDomain && selectedDomain.domain_name.toLowerCase() === "academic" ? (
+                        <CreateSessionForm
+                          data={createPostData}
+                          error={createPostError}
+                          onChange={handleCreatePostChange}
+                          onSubmit={handleCreatePostSubmit}
+                          onCancel={function () {
+                            setShowCreatePost(false);
+                            setCreatePostError("");
+                            setCreatePostData({ title: "", description: "", desired_payout: "", expires_at: "" });
+                          }}
+                        />
+                      ) : (
+                        <CreatePostForm
+                          data={createPostData}
+                          error={createPostError}
+                          onChange={handleCreatePostChange}
+                          onSubmit={handleCreatePostSubmit}
+                          onCancel={function () {
+                            setShowCreatePost(false);
+                            setCreatePostError("");
+                            setCreatePostData({ title: "", description: "", desired_payout: "", expires_at: "" });
+                          }}
+                        />
+                      )
+                    ) : null}
+
+                    {posts.length === 0 ? (
+                      <div className="empty-message">No posts in this category yet. </div>
+                    ) : (
+                      <div className="section-list">
+                        {posts.map(function (post) {
+                          return(
+                            <article key={post.post_id} className="section-card">
+                              <h2 className="section-title"> {post.title}</h2>
+                              <p className="section-tagline"> {post.description}</p>
+                              <p><strong>Status:</strong> {post.status}</p>
+                              <p>
+                                <strong>Price:</strong>{" "}
+                                {post.desired_payout == null ? "Not listed" : "$" + post.desired_payout}
+                              </p>
+                              {selectedDomain && selectedDomain.domain_name.toLowerCase() === "academic" ? (
+                                <button
+                                  className="join-call-button"
+                                  onClick={function () { handleJoinCall(post); }}
+                                >
+                                  🎥 Join Video Session
+                                </button>
+                              ) : null}
+                              {post.creator_user_id === user.user_id ? (
+                                <button
+                                  className="delete-post-button"
+                                  onClick={function () {
+                                    if (window.confirm("Delete this post?")) {
+                                      handleDeletePost(post.post_id);
+                                    }
+                                  }}
+                                >
+                                  🗑 Delete
+                                </button>
+                              ) : null}
+                            </article>
+                          );   
+                        })}
+                    </div>  
+                  )} 
+                </div>
+              ): null}
+
               </div>
             ) : (
               <div>
@@ -916,247 +909,6 @@
         );
       }
 
-      function TabBar(props) {
-        return (
-          <nav className="tabbar">
-            <button
-              className={"tab-button " + (props.activeTab === "services" ? "active" : "")}
-              onClick={function () {
-                props.onTab("services");
-              }}
-            >
-              Services
-            </button>
-
-            <button
-              className={"tab-button " + (props.activeTab === "social" ? "active" : "")}
-              onClick={function () {
-                props.onTab("social");
-              }}
-            >
-              Social
-            </button>
-
-            <button
-              className={"tab-button " + (props.activeTab === "academic" ? "active" : "")}
-              onClick={function () {
-                props.onTab("academic");
-              }}
-            >
-              Academic
-            </button>
-
-            <button
-              className={"tab-button " + (props.activeTab === "profile" ? "active" : "")}
-              onClick={function () {
-                props.onTab("profile");
-              }}
-            >
-              Profile
-            </button>
-          </nav>
-        );
-      }
-
-      function ServicesPage(props) {
-        return (
-          <div className="services-wrap">
-            <form className="services-topbar" onSubmit={props.onSearchSubmit}>
-              <input
-                className="services-search"
-                placeholder="Search by genre (e.g. Tutoring, Design, Photography)"
-                value={props.searchValue}
-                onChange={props.onSearchChange}
-              />
-              <button className="services-search-button" type="submit">
-                Search
-              </button>
-              <button
-                className="services-clear-button"
-                type="button"
-                onClick={props.onClearSearch}
-              >
-                Clear
-              </button>
-            </form>
-
-            {props.error ? <div className="error-message">{props.error}</div> : null}
-
-            {props.formOpen ? (
-              <div className="service-form-card">
-                <h2 className="service-form-title">Post a Service</h2>
-
-                <form className="auth-form" style={{ margin: 0, boxShadow: "none", padding: 0 }} onSubmit={props.onCreateService}>
-                  <input
-                    name="title"
-                    placeholder="Service title"
-                    value={props.serviceForm.title}
-                    onChange={props.onFormChange}
-                  />
-
-                  <input
-                    name="genre"
-                    placeholder="Genre of work"
-                    value={props.serviceForm.genre}
-                    onChange={props.onFormChange}
-                  />
-
-                  <input
-                    name="price"
-                    placeholder="Price (example: $25/hour)"
-                    value={props.serviceForm.price}
-                    onChange={props.onFormChange}
-                  />
-
-                  <textarea
-                    name="description"
-                    placeholder="Describe your service"
-                    value={props.serviceForm.description}
-                    onChange={props.onFormChange}
-                  />
-
-                  <div className="form-actions">
-                    <button type="button" onClick={props.onCancelForm}>
-                      Cancel
-                    </button>
-                    <button type="submit">Post Service</button>
-                  </div>
-                </form>
-              </div>
-            ) : null}
-
-            {props.loading ? <div className="empty-message">Loading services...</div> : null}
-
-            {!props.loading && props.services.length === 0 ? (
-              <div className="empty-message">No services found.</div>
-            ) : null}
-
-            {!props.loading && props.services.length > 0 ? (
-              <div className="services-grid">
-                {props.services.map(function (service) {
-                  return <ServiceCard key={service.id} service={service} />;
-                })}
-              </div>
-            ) : null}
-
-            <button className="plus-button" onClick={props.onOpenForm}>
-              +
-            </button>
-          </div>
-        );
-      }
-
-      function ServiceCard(props) {
-        const service = props.service;
-
-        return (
-          <article className="service-card">
-            <div className="service-card-header">
-              <h2 className="service-title">{service.title}</h2>
-              <div className="service-price">{service.price}</div>
-            </div>
-
-            <div className="service-genre">{service.genre}</div>
-
-            <p className="service-description">{service.description}</p>
-
-            <div className="service-meta">
-              Posted by {service.displayName}
-            </div>
-          </article>
-        );
-      }
-
-      function ProfilePage(props) {
-        const profile = props.profile;
-
-        return (
-          <div className="profile-wrap">
-            <div className="profile-card">
-              {props.loading ? (
-                <div className="empty-message">Loading profile...</div>
-              ) : null}
-
-              {props.error ? <div className="error-message">{props.error}</div> : null}
-
-              {!props.loading && profile ? (
-                <div>
-                  <div className="profile-top">
-                    <div>
-                      <img
-                        className="avatar"
-                        src={profile.avatarUrl || "https://i.pravatar.cc/200"}
-                        alt="Avatar"
-                      />
-                    </div>
-
-                    <div>
-                      <h2 className="profile-name">{profile.displayName}</h2>
-                      <p className="profile-email">{props.user.email}</p>
-                      <p className="profile-bio">
-                        {profile.bio ? profile.bio : "No bio yet. Tap Edit Profile."}
-                      </p>
-
-                      <div className="profile-actions">
-                        <button className="profile-button" onClick={props.onOpenEdit}>
-                          Edit Profile
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {props.editOpen ? (
-                    <form className="auth-form" onSubmit={props.onSaveProfile}>
-                      <input
-                        name="displayName"
-                        placeholder="Display name"
-                        value={props.editForm.displayName}
-                        onChange={props.onEditChange}
-                      />
-
-                      <input
-                        name="avatarUrl"
-                        placeholder="Avatar URL (paste an image link)"
-                        value={props.editForm.avatarUrl}
-                        onChange={props.onEditChange}
-                      />
-
-                      <textarea
-                        name="bio"
-                        placeholder="Bio"
-                        value={props.editForm.bio}
-                        onChange={props.onEditChange}
-                      />
-
-                      <div className="form-actions">
-                        <button type="button" onClick={props.onCancelEdit}>
-                          Cancel
-                        </button>
-                        <button type="submit">Save</button>
-                      </div>
-                    </form>
-                  ) : null}
-
-                  <div className="posts-header">
-                    <h3 style={{ margin: 0 }}>Posts</h3>
-                    <div style={{ color: "#666" }}>0 posts</div>
-                  </div>
-
-                  <div className="posts-grid">
-                    <div className="post-tile">Post</div>
-                    <div className="post-tile">Post</div>
-                    <div className="post-tile">Post</div>
-                    <div className="post-tile">Post</div>
-                    <div className="post-tile">Post</div>
-                    <div className="post-tile">Post</div>
-                  </div>
-                </div>
-              ) : null}
-            </div>
-          </div>
-        );
-      }
-
       function AuthForm(props) {
         return (
           <form className="auth-form" onSubmit={props.onSubmit}>
@@ -1167,6 +919,25 @@
               onChange={props.onChange}
             />
 
+    
+            {props.mode === "register" ? (
+              <input
+                name="first_name"
+                placeholder="First name"
+                value={props.formData.first_name}
+                onChange={props.onChange}
+              />
+            ) : null}
+
+            {props.mode === "register" ? (
+              <input
+                name="last_name"
+                placeholder="Last name"
+                value={props.formData.last_name}
+                onChange={props.onChange}
+              />
+            ) : null}
+
             <input
               name="password"
               placeholder="Password"
@@ -1174,6 +945,7 @@
               value={props.formData.password}
               onChange={props.onChange}
             />
+
 
             {props.mode === "register" ? (
               <input
@@ -1184,6 +956,8 @@
                 onChange={props.onChange}
               />
             ) : null}
+
+            
 
             <div className="form-actions">
               <button type="button" onClick={props.onCancel}>
@@ -1197,9 +971,129 @@
         );
       }
 
+      function JitsiCall(props) {
+        const containerRef = React.useRef(null);
+        const apiRef = React.useRef(null);
+
+        React.useEffect(function () {
+          if (!containerRef.current) return;
+
+          apiRef.current = new window.JitsiMeetExternalAPI("meet.jit.si", {
+            roomName: props.roomName,
+            parentNode: containerRef.current,
+            userInfo: { displayName: props.displayName },
+            configOverwrite: {
+              startWithAudioMuted: true,
+              startWithVideoMuted: false,
+              toolbarButtons: [
+                "microphone", "camera", "closedcaptions", "desktop",
+                "fullscreen", "fodeviceselection", "hangup", "chat",
+                "raisehand", "tileview", "select-background",
+              ],
+            },
+            interfaceConfigOverwrite: {
+              SHOW_JITSI_WATERMARK: false,
+              SHOW_WATERMARK_FOR_GUESTS: false,
+            },
+          });
+
+          apiRef.current.addEventListener("readyToClose", function () {
+            props.onLeave();
+          });
+
+          return function () {
+            if (apiRef.current) {
+              apiRef.current.dispose();
+            }
+          };
+        }, []);
+
+        return (
+          <div className="jitsi-overlay">
+            <div className="jitsi-overlay-header">
+              <h3>📹 {props.postTitle}</h3>
+              <button className="mode-button" onClick={props.onLeave}>
+                Leave Call
+              </button>
+            </div>
+            <div className="jitsi-container" ref={containerRef} />
+          </div>
+        );
+      }
+
+      function CreateSessionForm(props) {
+        return (
+          <div className="post-form">
+            {props.error ? (
+              <div className="error-message">{props.error}</div>
+            ) : null}
+            <input
+              name="title"
+              placeholder="Session title (e.g. CSCI 3308 study group)"
+              value={props.data.title}
+              onChange={props.onChange}
+            />
+            <div className="form-actions">
+              <button type="button" onClick={props.onCancel}>
+                Cancel
+              </button>
+              <button type="button" onClick={props.onSubmit}>
+                Create Session
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      function CreatePostForm(props) {
+        return (
+          <div className="post-form">
+            {props.error ? (
+              <div className="error-message">{props.error}</div>
+            ) : null}
+            <input
+              name="title"
+              placeholder="Title"
+              value={props.data.title}
+              onChange={props.onChange}
+            />
+            <textarea
+              name="description"
+              placeholder="Description"
+              value={props.data.description}
+              onChange={props.onChange}
+            />
+            <input
+              name="desired_payout"
+              placeholder="Desired payout (optional, e.g. 20.00)"
+              type="number"
+              min="0"
+              step="0.01"
+              value={props.data.desired_payout}
+              onChange={props.onChange}
+            />
+            <input
+              name="expires_at"
+              placeholder="Expires at (optional)"
+              type="datetime-local"
+              value={props.data.expires_at}
+              onChange={props.onChange}
+            />
+            <div className="form-actions">
+              <button type="button" onClick={props.onCancel}>
+                Cancel
+              </button>
+              <button type="button" onClick={props.onSubmit}>
+                Post
+              </button>
+            </div>
+          </div>
+        );
+      }
+
       function SectionCard(props) {
         return (
-          <article className="section-card">
+          <article className="section-card" onClick={props.onClick}>
             <h2 className="section-title">{props.title}</h2>
             <p className="section-tagline">{props.tagline}</p>
           </article>
