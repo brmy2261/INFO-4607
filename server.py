@@ -309,7 +309,7 @@ class AppDB:
         return [
             {
                 "image_id": row.image_id,
-                "post_id": row.post_id,
+                "posts_id": row.post_id,
                 "image_url": row.image_url,
                 "uploaded_at": row.uploaded_at,
             }
@@ -364,11 +364,19 @@ class AppDB:
             "images": self.get_post_images(row.post_id),
         }
 
-    def list_posts(self, category_id=None):
-        query = select(posts_table.c.post_id).order_by(
+    def list_posts(self, category_id=None,domain_id=None):
+        query = (select(posts_table.c.post_id).select_from(
+            posts_table.join(
+                categories_table,
+                posts_table.c.category_id == categories_table.c.category_id,
+            )
+        ).order_by(
             posts_table.c.created_at.desc(),
             posts_table.c.post_id.desc(),
         )
+    )
+        if domain_id is not None:
+            query = query.where(categories_table.c.domain_id == domain_id)
         if category_id is not None:
             query = query.where(posts_table.c.category_id == category_id)
         with self.engine.connect() as conn:
@@ -424,7 +432,7 @@ class AppDB:
         with self.engine.begin() as conn:
             result = conn.execute(
                 insert(post_images_table).values(
-                    post_id=post_id,
+                    posts_id=post_id,
                     image_url=payload.image_url.strip(),
                     uploaded_at=uploaded_at,
                 )
@@ -435,7 +443,7 @@ class AppDB:
             "success": True,
             "image": {
                 "image_id": image_id,
-                "post_id": post_id,
+                "posts_id": post_id,
                 "image_url": payload.image_url.strip(),
                 "uploaded_at": uploaded_at,
             },
@@ -479,19 +487,6 @@ class AppDB:
                 "is_read": False,
             },
         }
-
-    def delete_post(self, post_id, token):
-        user, error = self.require_user(token)
-        if error is not None:
-            return error
-        post_row = self.get_post_row(post_id)
-        if post_row is None:
-            return {"error": "Post not found."}
-        if post_row.creator_user_id != user["user_id"]:
-            return {"error": "You can only delete your own posts."}
-        with self.engine.begin() as conn:
-            conn.execute(delete(posts_table).where(posts_table.c.post_id == post_id))
-        return {"success": True}
 
     def create_rating(self, payload):
         rater, error = self.require_user(payload.token)
@@ -602,8 +597,8 @@ def list_categories(domain_id:int | None = None):
 
 
 @app.get("/posts")
-def list_posts(category_id: int | None = None):
-    return {"posts": db.list_posts(category_id)}
+def list_posts(category_id: int | None = None, domain_id: int | None = None):
+    return {"posts": db.list_posts(category_id=category_id, domain_id=domain_id)}
 
 
 @app.post("/posts")
@@ -624,11 +619,3 @@ def create_message(payload: MessageCreate):
 @app.post("/ratings")
 def create_rating(payload: RatingCreate):
     return db.create_rating(payload)
-
-
-class DeletePostRequest(BaseModel):
-    token: str
-
-@app.delete("/posts/{post_id}")
-def delete_post(post_id: int, payload: DeletePostRequest):
-    return db.delete_post(post_id, payload.token)
