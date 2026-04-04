@@ -9,55 +9,18 @@ from sqlalchemy import (
     String,
     Table,
     Boolean,
-    create_engine,
     select,
     insert,
     delete,
     func,
-    create_engine,
-    and_,
     text,
 )
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
-from urllib.parse import quote_plus
 from datetime import datetime, timezone
 from typing import Optional
 import hashlib
 import uuid
-import os
 
-
-load_dotenv()
-
-host = os.getenv("POSTGRES_HOST", "localhost")
-port = os.getenv("POSTGRES_PORT", "5432")
-db_name = os.getenv("POSTGRES_DB")
-user = os.getenv("POSTGRES_USER")
-pw = os.getenv("POSTGRES_PASSWORD")
-
-if not all([db_name, user, pw]):
-    raise RuntimeError("missing postgres_db, postgres_user, or postgres_password in .env")
-
-
-database_url = (
-    f"postgresql+psycopg2://{user}:{quote_plus(pw)}@{host}:{port}/{quote_plus(db_name)}"
-)
-
-engine = create_engine(
-    database_url,
-    pool_pre_ping=True,
-    future=True,
-    connect_args={"options": "-csearch_path=third_iteration"},
-)
-
-sessionlocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
-def test_connection():
-    with engine.connect() as conn:
-        return conn.execute(text("select 1")).scalar_one()
 
 
 
@@ -222,7 +185,7 @@ class AppDB:
 
         if len(password) < 6:
             return {"error": "Password must be at least 6 characters."}
-        if not email.endswith(".edu"):
+        if not email.endswith("colorado.edu"):
             return {"error": "Email must be a .edu address."}
 
         password_hash = self.hash_password(password)
@@ -375,11 +338,19 @@ class AppDB:
             rows = conn.execute(query).fetchall()
         return [self.get_post_details(row.post_id) for row in rows]
 
-    def list_posts(self, category_id=None):
-        query = select(posts_table.c.post_id).order_by(
+    def list_posts(self, category_id=None,domain_id=None):
+        query = (select(posts_table.c.post_id).select_from(
+            posts_table.join(
+                categories_table,
+                posts_table.c.category_id == categories_table.c.category_id,
+            )
+        ).order_by(
             posts_table.c.created_at.desc(),
             posts_table.c.post_id.desc(),
         )
+    )
+        if domain_id is not None:
+            query = query.where(categories_table.c.domain_id == domain_id)
         if category_id is not None:
             query = query.where(posts_table.c.category_id == category_id)
         with self.engine.connect() as conn:
@@ -613,8 +584,8 @@ def list_categories(domain_id:int | None = None):
 
 
 @app.get("/posts")
-def list_posts(category_id: int | None = None):
-    return {"posts": db.list_posts(category_id)}
+def list_posts(category_id: int | None = None, domain_id: int | None = None):
+    return {"posts": db.list_posts(category_id=category_id, domain_id=domain_id)}
 
 
 @app.post("/posts")
