@@ -66,6 +66,7 @@
         cursor: pointer;
         border-top: 2px solid transparent;
         transition: color 0.15s, border-color 0.15s;
+        text-transform: capitalize;
       }
 
       .tab-button:hover {
@@ -620,6 +621,10 @@
 
     <script type="text/babel">
 
+      function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      }
+
       function StudentQuest() {
         const [user, setUser] = React.useState(null);
         const [token, setToken] = React.useState("");
@@ -915,7 +920,10 @@
 
             {/* Header */}
             <header className="app-header">
-              <h1 className="app-title">Student Quest</h1>
+              <h1 className="app-title">
+                <img src="logo.jpeg" alt="SQ logo" style={{ height: "36px", width: "auto", marginRight: "8px", borderRadius: "6px", verticalAlign: "middle" }} />
+                Student Quest
+              </h1>
               {user ? (
                 <div className="header-actions">
                   <button
@@ -1034,7 +1042,7 @@
                         <h3>
                           {selectedCategory
                             ? selectedCategory.name + " posts"
-                            : "All " + selectedDomain.domain_name + " posts"}
+                            : "All " + capitalize(selectedDomain.domain_name) + " posts"}
                         </h3>
 
                         {/* Create post — only when a category is selected */}
