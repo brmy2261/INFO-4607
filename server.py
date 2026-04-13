@@ -462,6 +462,67 @@ class AppDB:
             },
         }
 
+    def get_messages(self, token, other_user_id=None):
+        user, error = self.require_user(token)
+        if error is not None:
+            return error
+        uid = user["user_id"]
+        if other_user_id is not None:
+            with self.engine.connect() as conn:
+                rows = conn.execute(
+                    select(messages_table)
+                    .where(
+                        (
+                            (messages_table.c.sender_user_id == uid) &
+                            (messages_table.c.receiver_user_id == other_user_id)
+                        ) |
+                        (
+                            (messages_table.c.sender_user_id == other_user_id) &
+                            (messages_table.c.receiver_user_id == uid)
+                        )
+                    )
+                    .order_by(messages_table.c.sent_at.asc())
+                ).fetchall()
+            return {
+                "thread": [
+                    {
+                        "message_id": row.message_id,
+                        "sender_user_id": row.sender_user_id,
+                        "receiver_user_id": row.receiver_user_id,
+                        "content": row.content,
+                        "sent_at": row.sent_at,
+                        "is_read": bool(row.is_read),
+                    }
+                    for row in rows
+                ]
+            }
+        with self.engine.connect() as conn:
+            rows = conn.execute(
+                select(messages_table)
+                .where(
+                    (messages_table.c.sender_user_id == uid) |
+                    (messages_table.c.receiver_user_id == uid)
+                )
+                .order_by(messages_table.c.sent_at.desc())
+            ).fetchall()
+        seen = {}
+        for row in rows:
+            other_id = row.receiver_user_id if row.sender_user_id == uid else row.sender_user_id
+            if other_id not in seen:
+                seen[other_id] = row
+        conversations = []
+        for other_id, row in seen.items():
+            other_user = self.get_user_by_id(other_id)
+            if other_user:
+                conversations.append({
+                    "other_user_id": other_id,
+                    "first_name": other_user["first_name"],
+                    "last_name": other_user["last_name"],
+                    "last_message": row.content,
+                    "last_sent_at": row.sent_at,
+                })
+        return {"conversations": conversations}
+
     def delete_post(self, post_id, token):
         user, error = self.require_user(token)
         if error is not None:
@@ -606,6 +667,16 @@ def create_message(payload: MessageCreate):
 @app.post("/ratings")
 def create_rating(payload: RatingCreate):
     return db.create_rating(payload)
+
+
+@app.get("/messages")
+def get_messages(token: str):
+    return db.get_messages(token)
+
+
+@app.get("/messages/thread")
+def get_message_thread(token: str, other_user_id: int):
+    return db.get_messages(token, other_user_id=other_user_id)
 
 
 @app.get("/users/{user_id}/posts")
