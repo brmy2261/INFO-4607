@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS messages (
 	message_id BIGSERIAL PRIMARY KEY,
 	sender_user_id	BIGINT not null,
 	receiver_user_id BIGINT not null,
-	request_id BIGINT not null,
+	request_id BIGINT null,
 	content TEXT NOT NULL,
 	sent_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	is_read BOOLEAN NOT NULL DEFAULT FALSE,
