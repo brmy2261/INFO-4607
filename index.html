@@ -791,6 +791,14 @@
           setShowProfile(true);
         }
 
+        function goHome() {        // New Addition (4/14)
+          setSelectedDomain(null);
+          setSelectedCategory(null);
+          setShowProfile(false);
+          setShowMessages(false);
+          setShowCreatePost(false);
+        }
+
         // ── Post handlers ─────────────────────────────────────
 
         function handleJoinCall(post) {
@@ -921,7 +929,19 @@
             {/* Header */}
             <header className="app-header">
               <h1 className="app-title">
-                <img src="logo.jpeg" alt="SQ logo" style={{ height: "36px", width: "auto", marginRight: "8px", borderRadius: "6px", verticalAlign: "middle" }} />
+                <img                      // New Addition (4/14)
+                  src="logo.jpeg"
+                  alt="SQ logo"
+                  onClick={goHome}
+                  style={{
+                    height: "36px",
+                    width: "auto",
+                    marginRight: "8px",
+                    borderRadius: "6px",
+                    verticalAlign: "middle",
+                    cursor: "pointer"
+                  }}
+                />
                 Student Quest
               </h1>
               {user ? (
