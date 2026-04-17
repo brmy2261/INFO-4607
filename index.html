@@ -12,7 +12,7 @@
       body {
         margin: 0;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-        background: #f5f5f5;
+        background: #fffeed;
         color: #111;
       }
 
@@ -23,8 +23,8 @@
         align-items: center;
         padding: 0 24px;
         height: 56px;
-        background: #ffffff;
-        border-bottom: 1px solid #ddd;
+        background: #e6e6e6;
+        border-bottom: 2px solid #000;
         position: sticky;
         top: 0;
         z-index: 10;
@@ -49,8 +49,8 @@
         left: 0;
         right: 0;
         height: 56px;
-        background: #ffffff;
-        border-top: 1px solid #ddd;
+        background: #e6e6e6;
+        border-top: 1px solid #b7b7b7;
         display: flex;
         z-index: 10;
       }
@@ -62,7 +62,7 @@
         font: inherit;
         font-size: 0.85rem;
         font-weight: 500;
-        color: #888;
+        color: #616161;
         cursor: pointer;
         border-top: 2px solid transparent;
         transition: color 0.15s, border-color 0.15s;
@@ -89,12 +89,13 @@
         max-width: 480px;
         margin: 40px auto;
         padding: 24px;
-        background: #ffffff;
+        background: #e6e6e6;
         border-radius: 10px;
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
         display: flex;
         flex-direction: column;
         gap: 10px;
+        border: 2px solid #000;
       }
 
       .auth-form input {
@@ -162,7 +163,7 @@
         padding: 8px 14px;
         border-radius: 6px;
         border: none;
-        background: #2d8a4e;
+        background: #0000df;
         color: #fff;
         cursor: pointer;
         font: inherit;
@@ -171,7 +172,7 @@
       }
 
       .join-call-button:hover {
-        background: #236e3e;
+        background: #0000b1;
       }
 
       .delete-post-button {
@@ -203,7 +204,7 @@
       .empty-message {
         padding: 48px 16px;
         text-align: center;
-        color: #888;
+        color: #616161;
         font-size: 0.95rem;
       }
 
@@ -232,13 +233,14 @@
       }
 
       .category-sidebar {
-        background: #ffffff;
+        background: #e6e6e6;
         border-radius: 10px;
         padding: 14px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
         display: flex;
         flex-direction: column;
         gap: 6px;
+        border: 2px solid #000
       }
 
       .category-sidebar h3 {
@@ -246,7 +248,7 @@
         font-size: 0.8rem;
         text-transform: uppercase;
         letter-spacing: 0.06em;
-        color: #888;
+        color: #6b6b6b;
       }
 
       .cat-button {
@@ -259,15 +261,15 @@
         cursor: pointer;
         font: inherit;
         font-size: 0.9rem;
-        color: #444;
+        color: #e6e6e6;
       }
 
       .cat-button:hover {
-        background: #f0f0f0;
+        background: #ffffff;
       }
 
       .cat-button.active {
-        background: #f0f0f0;
+        background: #ffffff;
         border-color: #ccc;
         color: #111;
         font-weight: 600;
@@ -287,13 +289,14 @@
       }
 
       .section-card {
-        background: #ffffff;
+        background: #e6e6e6;
         border-radius: 10px;
         padding: 14px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
         display: flex;
         flex-direction: column;
         gap: 6px;
+        border: 2px solid #000;
       }
 
       .section-card p {
@@ -320,13 +323,14 @@
       .post-form {
         max-width: 560px;
         padding: 16px;
-        background: #ffffff;
+        background: #e6e6e6;
         border-radius: 10px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         display: flex;
         flex-direction: column;
         gap: 10px;
         margin-bottom: 16px;
+        border: 2px solid #000
       }
 
       .post-form input,
@@ -394,6 +398,7 @@
         gap: 6px;
         margin-top: 16px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+        border: 2px solid #000
       }
 
       .profile-avatar {
@@ -541,6 +546,8 @@
         padding: 16px 0 12px 0;
         border-bottom: 1px solid #eee;
         margin-bottom: 12px;
+        background: #e6e6e6;
+        border: 2px solid #000;
       }
 
       .messages-thread-name {
