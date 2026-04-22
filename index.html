@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <title>Student Quest</title>
-
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <style>
       * {
         box-sizing: border-box;
@@ -12,7 +15,7 @@
       body {
         margin: 0;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-        background: #f5f5f5;
+        background: #fffeed;
         color: #111;
       }
 
@@ -23,8 +26,8 @@
         align-items: center;
         padding: 0 24px;
         height: 56px;
-        background: #ffffff;
-        border-bottom: 1px solid #ddd;
+        background: #e6e6e6;
+        border-bottom: 2px solid #000;
         position: sticky;
         top: 0;
         z-index: 10;
@@ -49,8 +52,8 @@
         left: 0;
         right: 0;
         height: 56px;
-        background: #ffffff;
-        border-top: 1px solid #ddd;
+        background: #e6e6e6;
+        border-top: 1px solid #b7b7b7;
         display: flex;
         z-index: 10;
       }
@@ -62,10 +65,11 @@
         font: inherit;
         font-size: 0.85rem;
         font-weight: 500;
-        color: #888;
+        color: #616161;
         cursor: pointer;
         border-top: 2px solid transparent;
-        transition: color 0.15s, border-color 0.15s;
+        transition: color 0.15s, border-color 0.15s, border-width 0.15s;
+        text-transform: capitalize;
       }
 
       .tab-button:hover {
@@ -76,6 +80,8 @@
         color: #111;
         font-weight: 700;
         border-top-color: #111;
+        border-right: 2px solid #111;
+        border-left: 2px solid #111;
       }
 
       /* ── Page content ── */
@@ -88,12 +94,13 @@
         max-width: 480px;
         margin: 40px auto;
         padding: 24px;
-        background: #ffffff;
+        background: #e6e6e6;
         border-radius: 10px;
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
         display: flex;
         flex-direction: column;
         gap: 10px;
+        border: 2px solid #000;
       }
 
       .auth-form input {
@@ -106,6 +113,7 @@
       .auth-form h2 {
         margin: 0 0 4px 0;
         font-size: 1.1rem;
+        font-weight: 700 !important;
       }
 
       .form-actions {
@@ -161,7 +169,7 @@
         padding: 8px 14px;
         border-radius: 6px;
         border: none;
-        background: #2d8a4e;
+        background: #0000df;
         color: #fff;
         cursor: pointer;
         font: inherit;
@@ -170,7 +178,7 @@
       }
 
       .join-call-button:hover {
-        background: #236e3e;
+        background: #0000b1;
       }
 
       .delete-post-button {
@@ -202,7 +210,7 @@
       .empty-message {
         padding: 48px 16px;
         text-align: center;
-        color: #888;
+        color: #616161;
         font-size: 0.95rem;
       }
 
@@ -214,6 +222,7 @@
       .domain-heading {
         margin: 0 0 16px 0;
         font-size: 1.2rem;
+        font-weight: 700 !important;
         text-transform: capitalize;
       }
 
@@ -231,21 +240,23 @@
       }
 
       .category-sidebar {
-        background: #ffffff;
+        background: #e6e6e6;
         border-radius: 10px;
         padding: 14px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
         display: flex;
         flex-direction: column;
         gap: 6px;
+        border: 2px solid #000
       }
 
       .category-sidebar h3 {
         margin: 0 0 8px 0;
         font-size: 0.8rem;
+        font-weight: 700 !important;
         text-transform: uppercase;
         letter-spacing: 0.06em;
-        color: #888;
+        color: #6b6b6b;
       }
 
       .cat-button {
@@ -258,15 +269,15 @@
         cursor: pointer;
         font: inherit;
         font-size: 0.9rem;
-        color: #444;
+        color: #e6e6e6;
       }
 
       .cat-button:hover {
-        background: #f0f0f0;
+        background: #ffffff;
       }
 
       .cat-button.active {
-        background: #f0f0f0;
+        background: #ffffff;
         border-color: #ccc;
         color: #111;
         font-weight: 600;
@@ -286,13 +297,14 @@
       }
 
       .section-card {
-        background: #ffffff;
+        background: #e6e6e6;
         border-radius: 10px;
         padding: 14px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
         display: flex;
         flex-direction: column;
         gap: 6px;
+        border: 2px solid #000;
       }
 
       .section-card p {
@@ -319,13 +331,14 @@
       .post-form {
         max-width: 560px;
         padding: 16px;
-        background: #ffffff;
+        background: #e6e6e6;
         border-radius: 10px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         display: flex;
         flex-direction: column;
         gap: 10px;
         margin-bottom: 16px;
+        border: 2px solid #000
       }
 
       .post-form input,
@@ -393,6 +406,7 @@
         gap: 6px;
         margin-top: 16px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+        border: 2px solid #000
       }
 
       .profile-avatar {
@@ -470,6 +484,145 @@
         padding: 32px 0;
         font-size: 0.9rem;
       }
+
+      /* ── Direct Messages ── */
+      .messages-panel {
+        max-width: 640px;
+        margin: 0 auto;
+        padding: 0 16px 80px 16px;
+      }
+
+      .messages-heading {
+        margin: 24px 0 16px 0;
+        font-size: 1.1rem;
+      }
+
+      .conversation-card {
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 14px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 10px;
+        cursor: pointer;
+      }
+
+      .conversation-card:hover {
+        background: #f9f9f9;
+      }
+
+      .conversation-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #111;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1rem;
+        flex-shrink: 0;
+      }
+
+      .conversation-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .conversation-name {
+        margin: 0 0 2px 0;
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+
+      .conversation-preview {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #888;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .messages-thread-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 0 12px 0;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 12px;
+        background: #e6e6e6;
+        border: 2px solid #000;
+      }
+
+      .messages-thread-name {
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      .messages-thread {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-bottom: 16px;
+      }
+
+      .message-bubble {
+        max-width: 75%;
+        padding: 10px 14px;
+        border-radius: 16px;
+        font-size: 0.9rem;
+        line-height: 1.4;
+      }
+
+      .message-bubble.mine {
+        align-self: flex-end;
+        background: #111;
+        color: #fff;
+        border-bottom-right-radius: 4px;
+      }
+
+      .message-bubble.theirs {
+        align-self: flex-start;
+        background: #ffffff;
+        color: #111;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+        border-bottom-left-radius: 4px;
+      }
+
+      .message-content {
+        margin: 0 0 4px 0;
+      }
+
+      .message-time {
+        margin: 0;
+        font-size: 0.72rem;
+        opacity: 0.6;
+      }
+
+      .message-compose {
+        display: flex;
+        gap: 8px;
+        padding: 12px 0;
+        border-top: 1px solid #eee;
+      }
+
+      .message-input {
+        flex: 1;
+        padding: 10px 14px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font: inherit;
+        font-size: 0.9rem;
+        outline: none;
+      }
+
+      .message-input:focus {
+        border-color: #111;
+      }
     </style>
   </head>
 
@@ -483,9 +636,11 @@
 
     <script type="text/babel">
 
+      function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      }
+
       function StudentQuest() {
-        const [searchQuery, setSearchQuery] = React.useState("");
-        const [searchResults, setSearchResults] = React.useState(null);
         const [user, setUser] = React.useState(null);
         const [token, setToken] = React.useState("");
         const [mode, setMode] = React.useState("login");
@@ -512,12 +667,22 @@
           title: "", description: "", desired_payout: "", expires_at: "",
         });
 
+        const [showMessages, setShowMessages] = React.useState(false);
+        const [conversations, setConversations] = React.useState([]);
+        const [activeConversation, setActiveConversation] = React.useState(null);
+        const [thread, setThread] = React.useState([]);
+        const [newMsg, setNewMsg] = React.useState("");
+
+        const [loadingPosts, setLoadingPosts] = React.useState(false);
+        const [loadingProfile, setLoadingProfile] = React.useState(false);
+        const [loadingMessages, setLoadingMessages] = React.useState(false);
+
         // ── Effects ──────────────────────────────────────────
 
         React.useEffect(function () {
           const savedToken = localStorage.getItem("studentquest_token");
           if (!savedToken) return;
-          fetch("https://cuquest.onrender.com/me?token=" + savedToken)
+          fetch("http://localhost:8000/me?token=" + savedToken)
             .then(function (r) { return r.json(); })
             .then(function (data) {
               if (data.error) {
@@ -532,7 +697,7 @@
 
         React.useEffect(function () {
           if (!user) return;
-          fetch("https://cuquest.onrender.com/domains")
+          fetch("http://localhost:8000/domains")
             .then(function (r) { return r.json(); })
             .then(function (data) { setDomains(data.domains || []); });
         }, [user]);
@@ -544,19 +709,20 @@
             setSelectedCategory(null);
             return;
           }
-          fetch("https://cuquest.onrender.com/categories?domain_id=" + selectedDomain.domain_id)
+          fetch("http://localhost:8000/categories?domain_id=" + selectedDomain.domain_id)
             .then(function (r) { return r.json(); })
             .then(function (data) { setCategories(data.categories || []); });
         }, [selectedDomain]);
 
         React.useEffect(function () {
           if (!selectedDomain) return;
-          var url = "https://cuquest.onrender.com/posts?domain_id=" + selectedDomain.domain_id;
+          var url = "http://localhost:8000/posts?domain_id=" + selectedDomain.domain_id;
           if (selectedCategory) url += "&category_id=" + selectedCategory.category_id;
+          setLoadingPosts(true);
           fetch(url)
             .then(function (r) { return r.json(); })
-            .then(function (data) { setPosts(data.posts || []); })
-            .catch(function () { setPosts([]); });
+            .then(function (data) { setPosts(data.posts || []); setLoadingPosts(false); })
+            .catch(function () { setPosts([]); setLoadingPosts(false); });
         }, [selectedDomain, selectedCategory]);
 
         // ── Auth handlers ─────────────────────────────────────
@@ -567,12 +733,6 @@
           setFormData({ email: "", password: "", confirmPassword: "", first_name: "", last_name: "" });
           setFormOpen(true);
         }
-
-        function handleSearch() {
-          fetch("https://cuquest.onrender.com/search?q=" + encodeURIComponent(searchQuery))
-            .then(function(r) { return r.json(); })
-            .then(function(data) { setSearchResults(data); });
-}
 
         function handleChange(event) {
           setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -603,7 +763,7 @@
           const payload = mode === "login"
             ? { email: cleanEmail, password: formData.password }
             : { email: cleanEmail, password: formData.password, first_name: formData.first_name.trim(), last_name: formData.last_name.trim() };
-          fetch("https://cuquest.onrender.com/" + (mode === "login" ? "login" : "register"), {
+          fetch("http://localhost:8000/" + (mode === "login" ? "login" : "register"), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
@@ -620,7 +780,7 @@
         }
 
         function handleLogout() {
-          fetch("https://cuquest.onrender.com/logout", {
+          fetch("http://localhost:8000/logout", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ token: token }),
@@ -635,6 +795,7 @@
               setFormOpen(true);
               setSelectedDomain(null);
               setShowProfile(false);
+              setShowMessages(false);
               setFormData({ email: "", password: "", confirmPassword: "", first_name: "", last_name: "" });
             });
         }
@@ -642,11 +803,21 @@
         // ── Profile handlers ──────────────────────────────────
 
         function handleOpenProfile() {
-          fetch("https://cuquest.onrender.com/users/" + user.user_id + "/posts")
+          setLoadingProfile(true);
+          fetch("http://localhost:8000/users/" + user.user_id + "/posts")
             .then(function (r) { return r.json(); })
-            .then(function (data) { setUserPosts(data.posts || []); })
-            .catch(function () { setUserPosts([]); });
+            .then(function (data) { setUserPosts(data.posts || []); setLoadingProfile(false); })
+            .catch(function () { setUserPosts([]); setLoadingProfile(false); });
+          setShowMessages(false);
           setShowProfile(true);
+        }
+
+        function goHome() {        // New Addition (4/14)
+          setSelectedDomain(null);
+          setSelectedCategory(null);
+          setShowProfile(false);
+          setShowMessages(false);
+          setShowCreatePost(false);
         }
 
         // ── Post handlers ─────────────────────────────────────
@@ -657,7 +828,7 @@
         }
 
         function handleDeletePost(post_id, onSuccess) {
-          fetch("https://cuquest.onrender.com/posts/" + post_id, {
+          fetch("http://localhost:8000/posts/" + post_id, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ token: token }),
@@ -691,7 +862,7 @@
             desired_payout: createPostData.desired_payout !== "" ? parseFloat(createPostData.desired_payout) : null,
             expires_at: createPostData.expires_at !== "" ? new Date(createPostData.expires_at).toISOString() : null,
           };
-          fetch("https://cuquest.onrender.com/posts", {
+          fetch("http://localhost:8000/posts", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
@@ -709,6 +880,57 @@
           setShowCreatePost(false);
           setCreatePostError("");
           setCreatePostData({ title: "", description: "", desired_payout: "", expires_at: "" });
+        }
+
+        // ── Message handlers ──────────────────────────────────
+
+        function handleOpenMessages() {
+          setLoadingMessages(true);
+          fetch("http://localhost:8000/messages?token=" + token)
+            .then(function (r) { return r.json(); })
+            .then(function (data) { setConversations(data.conversations || []); setLoadingMessages(false); })
+            .catch(function () { setConversations([]); setLoadingMessages(false); });
+          setShowProfile(false);
+          setShowMessages(true);
+          setActiveConversation(null);
+          setThread([]);
+        }
+
+        function handleOpenThread(convo) {
+          fetch("http://localhost:8000/messages/thread?token=" + token + "&other_user_id=" + convo.other_user_id)
+            .then(function (r) { return r.json(); })
+            .then(function (data) { setThread(data.thread || []); });
+          setActiveConversation(convo);
+        }
+
+        function handleMessageUser(post) {
+          var convo = {
+            other_user_id: post.creator_user_id,
+            first_name: post.creator_first_name,
+            last_name: post.creator_last_name,
+          };
+          fetch("http://localhost:8000/messages/thread?token=" + token + "&other_user_id=" + post.creator_user_id)
+            .then(function (r) { return r.json(); })
+            .then(function (data) { setThread(data.thread || []); });
+          setShowProfile(false);
+          setShowMessages(true);
+          setActiveConversation(convo);
+          setNewMsg("");
+        }
+
+        function handleSendMessage() {
+          if (!newMsg.trim()) return;
+          fetch("http://localhost:8000/messages", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: token, receiver_user_id: activeConversation.other_user_id, content: newMsg.trim() }),
+          })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+              if (data.error) { alert(data.error); return; }
+              setNewMsg("");
+              handleOpenThread(activeConversation);
+            });
         }
 
         // ── Render ────────────────────────────────────────────
@@ -729,35 +951,35 @@
 
             {/* Header */}
             <header className="app-header">
-              <h1 className="app-title">Student Quest</h1>
-
-              {/* START*/}
-
-            {/* Search bar  */}
-            <div style={{display: "flex", alignItems: "center", gap: "8px", flex: 1, maxWidth: "400px", margin: "0 24px"}}>
-                <input
-                    type="text"
-                    placeholder="Search posts, users, categories..."
-                    value={searchQuery}
-                    onChange={function(e) { setSearchQuery(e.target.value); setSearchResults(null); }}
-                    onKeyDown={function(e) { if (e.key === "Enter") handleSearch(); }}
-                    style={{flex: 1, padding: "8px 12px", fontSize: "14px", borderRadius: "6px", border: "1px solid #ddd", height: "36px", boxSizing: "border-box"}}
+              <h1 className="app-title">
+                <img                      // New Addition (4/14)
+                  src="logo.jpeg"
+                  alt="SQ logo"
+                  onClick={goHome}
+                  style={{
+                    height: "36px",
+                    width: "auto",
+                    marginRight: "8px",
+                    borderRadius: "6px",
+                    verticalAlign: "middle",
+                    cursor: "pointer"
+                  }}
                 />
-                <button
-                    onClick={handleSearch}
-                    style={{padding: "8px 16px", height: "36px", fontSize: "14px", borderRadius: "6px", border: "1px solid #ddd", cursor: "pointer", whiteSpace: "nowrap"}}
-                >
-                    Search
-                </button>
-            </div>
-              
-           {user ? (
+                Student Quest
+              </h1>
+              {user ? (
                 <div className="header-actions">
                   <button
                     className={"mode-button" + (showProfile ? " active" : "")}
                     onClick={showProfile ? function () { setShowProfile(false); } : handleOpenProfile}
                   >
                     Profile
+                  </button>
+                  <button
+                    className={"mode-button" + (showMessages ? " active" : "")}
+                    onClick={showMessages ? function () { setShowMessages(false); } : handleOpenMessages}
+                  >
+                    Messages
                   </button>
                   <button className="mode-button" onClick={handleLogout}>
                     Logout
@@ -766,34 +988,25 @@
               ) : null}
             </header>
 
-            {/* Search results */}
-            {searchResults && (
-                <div style={{padding: "16px", borderBottom: "1px solid #eee"}}>
-                    <h3 style={{margin: "0 0 8px"}}>Posts ({searchResults.posts.length})</h3>
-                    {searchResults.posts.map(function(p) {
-                        return <div key={p.post_id} style={{borderBottom: "1px solid #eee", padding: "8px 0"}}>
-                            <strong>{p.title}</strong> — {p.category_name} — {p.status}
-                            <p style={{margin: "4px 0 0", color: "#666", fontSize: "14px"}}>{p.description}</p>
-                        </div>;
-                    })}
-                    <h3 style={{margin: "16px 0 8px"}}>Users ({searchResults.users.length})</h3>
-                    {searchResults.users.map(function(u) {
-                        return <div key={u.user_id} style={{padding: "4px 0"}}>
-                            {u.first_name} {u.last_name} <span style={{color: "#888", fontSize: "13px"}}>({u.email})</span>
-                        </div>;
-                    })}
-                    <h3 style={{margin: "16px 0 8px"}}>Categories ({searchResults.categories.length})</h3>
-                    {searchResults.categories.map(function(c) {
-                        return <div key={c.category_id} style={{padding: "4px 0"}}>{c.name}</div>;
-                    })}
-                </div>
-            )}
-
             {user ? (
               <div className="page-content">
 
-                {/* ── Profile view ── */}
-                {showProfile ? (
+                {/* ── Messages view ── */}
+                {showMessages ? (
+                  <MessagesPanel
+                    userId={user.user_id}
+                    conversations={conversations}
+                    activeConversation={activeConversation}
+                    thread={thread}
+                    newMsg={newMsg}
+                    loading={loadingMessages}
+                    onNewMsgChange={function (val) { setNewMsg(val); }}
+                    onOpenThread={handleOpenThread}
+                    onSend={handleSendMessage}
+                    onBack={function () { setActiveConversation(null); setThread([]); }}
+                  />
+
+                ) : showProfile ? (
                   <div className="profile-panel">
                     <div className="profile-header">
                       <div className="profile-avatar">
@@ -807,7 +1020,12 @@
                     </div>
                     <div className="profile-posts-section">
                       <p className="profile-posts-heading">My Posts</p>
-                      {userPosts.length === 0 ? (
+                      {loadingProfile ? (
+                        <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center" }}>
+                          <div className="spinner-border" role="status"></div>
+                          <p style={{ marginTop: "12px", color: "#616161" }}>Loading profile...</p>
+                        </div>
+                      ) : userPosts.length === 0 ? (
                         <p className="profile-empty">No posts yet.</p>
                       ) : (
                         userPosts.map(function (p) {
@@ -873,7 +1091,7 @@
                         <h3>
                           {selectedCategory
                             ? selectedCategory.name + " posts"
-                            : "All " + selectedDomain.domain_name + " posts"}
+                            : "All " + capitalize(selectedDomain.domain_name) + " posts"}
                         </h3>
 
                         {/* Create post — only when a category is selected */}
@@ -911,7 +1129,12 @@
                           </div>
                         ) : null}
 
-                        {posts.length === 0 ? (
+                        {loadingPosts ? (
+                          <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center" }}>
+                            <div className="spinner-border" role="status"></div>
+                            <p style={{ marginTop: "12px", color: "#616161" }}>Loading posts...</p>
+                          </div>
+                        ) : posts.length === 0 ? (
                           <div className="empty-message">No posts found.</div>
                         ) : (
                           <div className="section-list">
@@ -946,6 +1169,14 @@
                                       Delete
                                     </button>
                                   ) : null}
+                                  {post.creator_user_id !== user.user_id ? (
+                                    <button
+                                      className="mode-button"
+                                      onClick={function () { handleMessageUser(post); }}
+                                    >
+                                      Message
+                                    </button>
+                                  ) : null}
                                 </article>
                               );
                             })}
@@ -974,6 +1205,7 @@
                           setSelectedCategory(null);
                           setShowCreatePost(false);
                           setShowProfile(false);
+                          setShowMessages(false);
                         }}
                       >
                         {domain.domain_name}
@@ -1177,9 +1409,91 @@
         );
       }
 
+      function MessagesPanel(props) {
+        const inputRef = React.useRef(null);
+        React.useEffect(function () {
+          if (props.activeConversation && inputRef.current) {
+            inputRef.current.focus();
+          }
+        }, [props.activeConversation]);
+
+        if (props.activeConversation) {
+          return (
+            <div className="messages-panel">
+              <div className="messages-thread-header">
+                <button className="mode-button" onClick={props.onBack}>← Back</button>
+                <span className="messages-thread-name">
+                  {props.activeConversation.first_name} {props.activeConversation.last_name}
+                </span>
+              </div>
+              <div className="messages-thread">
+                {props.thread.length === 0 ? (
+                  <div className="empty-message">No messages yet. Say hello!</div>
+                ) : (
+                  props.thread.map(function (msg) {
+                    const isMine = msg.sender_user_id === props.userId;
+                    return (
+                      <div key={msg.message_id} className={"message-bubble" + (isMine ? " mine" : " theirs")}>
+                        <p className="message-content">{msg.content}</p>
+                        <p className="message-time">
+                          {new Date(msg.sent_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                        </p>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+              <div className="message-compose">
+                <input
+                  ref={inputRef}
+                  className="message-input"
+                  placeholder="Type a message..."
+                  value={props.newMsg}
+                  onChange={function (e) { props.onNewMsgChange(e.target.value); }}
+                  onKeyDown={function (e) { if (e.key === "Enter") props.onSend(); }}
+                />
+                <button className="primary-button" onClick={props.onSend}>Send</button>
+              </div>
+            </div>
+          );
+        }
+        return (
+          <div className="messages-panel">
+            <h2 className="messages-heading">Messages</h2>
+            {props.loading ? (
+              <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center" }}>
+                <div className="spinner-border" role="status"></div>
+                <p style={{ marginTop: "12px", color: "#616161" }}>Loading messages...</p>
+              </div>
+            ) : props.conversations.length === 0 ? (
+              <div className="empty-message">No conversations yet.</div>
+            ) : (
+              props.conversations.map(function (convo) {
+                return (
+                  <div
+                    key={convo.other_user_id}
+                    className="conversation-card"
+                    onClick={function () { props.onOpenThread(convo); }}
+                  >
+                    <div className="conversation-avatar">
+                      {convo.first_name.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="conversation-info">
+                      <p className="conversation-name">{convo.first_name} {convo.last_name}</p>
+                      <p className="conversation-preview">{convo.last_message}</p>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        );
+      }
+
       const container = document.getElementById("root");
       const root = ReactDOM.createRoot(container);
       root.render(<StudentQuest />);
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
