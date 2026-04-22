@@ -607,6 +607,33 @@
       .message-input:focus {
         border-color: #111;
       }
+
+      /* ── Like button ── */
+      .like-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 6px 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        background: #fff;
+        cursor: pointer;
+        font: inherit;
+        font-size: 0.88rem;
+        color: #666;
+        transition: border-color 0.15s, color 0.15s;
+      }
+
+      .like-button:hover {
+        border-color: #e05c5c;
+        color: #e05c5c;
+      }
+
+      .like-button.liked {
+        border-color: #e05c5c;
+        color: #e05c5c;
+        background: #fff5f5;
+      }
     </style>
   </head>
 
@@ -692,7 +719,7 @@
 
         React.useEffect(function () {
           if (!selectedDomain) return;
-          var url = "http://localhost:8000/posts?domain_id=" + selectedDomain.domain_id;
+          var url = "http://localhost:8000/posts?domain_id=" + selectedDomain.domain_id + "&token=" + token;
           if (selectedCategory) url += "&category_id=" + selectedCategory.category_id;
           fetch(url)
             .then(function (r) { return r.json(); })
@@ -894,6 +921,24 @@
               if (data.error) { alert(data.error); return; }
               setNewMsg("");
               handleOpenThread(activeConversation);
+            });
+        }
+
+        function handleLikePost(post_id) {
+          fetch("http://localhost:8000/posts/" + post_id + "/like", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: token }),
+          })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+              if (data.error) return;
+              setPosts(function (prev) {
+                return prev.map(function (p) {
+                  if (p.post_id !== post_id) return p;
+                  return { ...p, like_count: data.like_count, user_has_liked: data.liked };
+                });
+              });
             });
         }
 
@@ -1107,6 +1152,12 @@
                                       Delete
                                     </button>
                                   ) : null}
+                                  <button
+                                    className={"like-button" + (post.user_has_liked ? " liked" : "")}
+                                    onClick={function () { handleLikePost(post.post_id); }}
+                                  >
+                                    {post.user_has_liked ? "♥" : "♡"} {post.like_count || 0}
+                                  </button>
                                   {post.creator_user_id !== user.user_id ? (
                                     <button
                                       className="mode-button"

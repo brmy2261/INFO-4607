@@ -9,6 +9,7 @@ from sqlalchemy import (
     String,
     Table,
     Boolean,
+    UniqueConstraint,
     select,
     insert,
     delete,
@@ -49,7 +50,18 @@ sessions_table = Table(
     extend_existing=True,
 )
 
-metadata.create_all(engine, tables=[sessions_table])
+post_likes_table = Table(
+    "post_likes",
+    metadata,
+    Column("like_id", Integer, primary_key=True),
+    Column("post_id", Integer, nullable=False),
+    Column("user_id", Integer, nullable=False),
+    Column("created_at", String, nullable=False),
+    UniqueConstraint("post_id", "user_id", name="uq_post_likes_post_user"),
+    extend_existing=True,
+)
+
+metadata.create_all(engine, tables=[sessions_table, post_likes_table])
 
 
 class UserCreate(BaseModel):
@@ -84,7 +96,6 @@ class MessageCreate(BaseModel):
     token: str
     receiver_user_id: int
     content: str
-    request_id: Optional[int] = None
 
 
 class RatingCreate(BaseModel):
@@ -93,6 +104,10 @@ class RatingCreate(BaseModel):
     rated_user_id: int
     score: int
     comment: Optional[str] = None
+
+
+class LikeRequest(BaseModel):
+    token: str
 
 
 
@@ -279,7 +294,7 @@ class AppDB:
             for row in rows
         ]
 
-    def get_post_details(self, post_id):
+    def get_post_details(self, post_id, user_id=None):
         with self.engine.connect() as conn:
             row = conn.execute(
                 select(
@@ -306,8 +321,21 @@ class AppDB:
                 )
                 .where(posts_table.c.post_id == post_id)
             ).fetchone()
-        if row is None:
-            return None
+            if row is None:
+                return None
+            like_count = conn.execute(
+                select(func.count()).select_from(post_likes_table).where(
+                    post_likes_table.c.post_id == post_id
+                )
+            ).scalar_one()
+            user_has_liked = False
+            if user_id is not None:
+                user_has_liked = conn.execute(
+                    select(post_likes_table.c.like_id).where(
+                        (post_likes_table.c.post_id == post_id) &
+                        (post_likes_table.c.user_id == user_id)
+                    )
+                ).fetchone() is not None
         return {
             "post_id": row.post_id,
             "creator_user_id": row.creator_user_id,
@@ -324,10 +352,12 @@ class AppDB:
             "status": row.status,
             "created_at": row.created_at,
             "expires_at": row.expires_at,
+            "like_count": like_count,
+            "user_has_liked": user_has_liked,
             "images": self.get_post_images(row.post_id),
         }
 
-    def get_user_posts(self, user_id):
+    def get_user_posts(self, user_id, viewer_user_id=None):
         query = select(posts_table.c.post_id).where(
             posts_table.c.creator_user_id == user_id
         ).order_by(
@@ -336,9 +366,9 @@ class AppDB:
         )
         with self.engine.connect() as conn:
             rows = conn.execute(query).fetchall()
-        return [self.get_post_details(row.post_id) for row in rows]
+        return [self.get_post_details(row.post_id, user_id=viewer_user_id) for row in rows]
 
-    def list_posts(self, category_id=None,domain_id=None):
+    def list_posts(self, category_id=None, domain_id=None, user_id=None):
         query = (select(posts_table.c.post_id).select_from(
             posts_table.join(
                 categories_table,
@@ -355,7 +385,7 @@ class AppDB:
             query = query.where(posts_table.c.category_id == category_id)
         with self.engine.connect() as conn:
             rows = conn.execute(query).fetchall()
-        return [self.get_post_details(row.post_id) for row in rows]
+        return [self.get_post_details(row.post_id, user_id=user_id) for row in rows]
 
     def create_post(self, payload):
         user, error = self.require_user(payload.token)
@@ -432,8 +462,6 @@ class AppDB:
         receiver = self.get_user_by_id(payload.receiver_user_id)
         if receiver is None:
             return {"error": "Receiver not found."}
-        if payload.request_id is not None and self.get_post_row(payload.request_id) is None:
-            return {"error": "Referenced post was not found."}
 
         sent_at = self.now_iso()
         with self.engine.begin() as conn:
@@ -441,10 +469,8 @@ class AppDB:
                 insert(messages_table).values(
                     sender_user_id=sender["user_id"],
                     receiver_user_id=payload.receiver_user_id,
-                    request_id=payload.request_id,
                     content=payload.content.strip(),
                     sent_at=sent_at,
-                    is_read=False,
                 )
             )
             message_id = result.inserted_primary_key[0]
@@ -455,10 +481,8 @@ class AppDB:
                 "message_id": message_id,
                 "sender_user_id": sender["user_id"],
                 "receiver_user_id": payload.receiver_user_id,
-                "request_id": payload.request_id,
                 "content": payload.content.strip(),
                 "sent_at": sent_at,
-                "is_read": False,
             },
         }
 
@@ -491,7 +515,6 @@ class AppDB:
                         "receiver_user_id": row.receiver_user_id,
                         "content": row.content,
                         "sent_at": row.sent_at,
-                        "is_read": bool(row.is_read),
                     }
                     for row in rows
                 ]
@@ -535,6 +558,47 @@ class AppDB:
         with self.engine.begin() as conn:
             conn.execute(delete(posts_table).where(posts_table.c.post_id == post_id))
         return {"success": True}
+
+    def toggle_like(self, post_id, token):
+        user, error = self.require_user(token)
+        if error is not None:
+            return error
+        if self.get_post_row(post_id) is None:
+            return {"error": "Post not found."}
+        uid = user["user_id"]
+        with self.engine.connect() as conn:
+            existing = conn.execute(
+                select(post_likes_table.c.like_id).where(
+                    (post_likes_table.c.post_id == post_id) &
+                    (post_likes_table.c.user_id == uid)
+                )
+            ).fetchone()
+        if existing:
+            with self.engine.begin() as conn:
+                conn.execute(
+                    delete(post_likes_table).where(
+                        (post_likes_table.c.post_id == post_id) &
+                        (post_likes_table.c.user_id == uid)
+                    )
+                )
+            liked = False
+        else:
+            with self.engine.begin() as conn:
+                conn.execute(
+                    insert(post_likes_table).values(
+                        post_id=post_id,
+                        user_id=uid,
+                        created_at=self.now_iso(),
+                    )
+                )
+            liked = True
+        with self.engine.connect() as conn:
+            like_count = conn.execute(
+                select(func.count()).select_from(post_likes_table).where(
+                    post_likes_table.c.post_id == post_id
+                )
+            ).scalar_one()
+        return {"liked": liked, "like_count": like_count}
 
     def create_rating(self, payload):
         rater, error = self.require_user(payload.token)
@@ -645,8 +709,13 @@ def list_categories(domain_id:int | None = None):
 
 
 @app.get("/posts")
-def list_posts(category_id: int | None = None, domain_id: int | None = None):
-    return {"posts": db.list_posts(category_id=category_id, domain_id=domain_id)}
+def list_posts(category_id: int | None = None, domain_id: int | None = None, token: str | None = None):
+    user_id = None
+    if token:
+        user = db.get_user_by_token(token)
+        if user:
+            user_id = user["user_id"]
+    return {"posts": db.list_posts(category_id=category_id, domain_id=domain_id, user_id=user_id)}
 
 
 @app.post("/posts")
@@ -657,6 +726,11 @@ def create_post(payload: CreatePostRequest):
 @app.post("/posts/{post_id}/images")
 def add_post_image(post_id: int, payload: AddImageRequest):
     return db.add_post_image(post_id, payload)
+
+
+@app.post("/posts/{post_id}/like")
+def toggle_like(post_id: int, payload: LikeRequest):
+    return db.toggle_like(post_id, payload.token)
 
 
 @app.post("/messages")

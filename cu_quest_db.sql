@@ -141,33 +141,26 @@ CREATE TABLE IF NOT EXISTS ratings (
 
 CREATE TABLE IF NOT EXISTS messages (
 	message_id BIGSERIAL PRIMARY KEY,
-	sender_user_id	BIGINT not null,
-	receiver_user_id BIGINT not null,
-	request_id BIGINT not null,
+	sender_user_id BIGINT NOT NULL,
+	receiver_user_id BIGINT NOT NULL,
 	content TEXT NOT NULL,
 	sent_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-	is_read BOOLEAN NOT NULL DEFAULT FALSE,
 
-	constraint messages_sender_fk
-		foreign key (sender_user_id)
-		references users(user_id)
-		on delete cascade,
+	CONSTRAINT messages_sender_fk
+		FOREIGN KEY (sender_user_id)
+		REFERENCES users(user_id)
+		ON DELETE CASCADE,
 
-	constraint messages_receiver_fk
-		foreign key (receiver_user_id)
-        REFERENCES users(user_id)
-        ON DELETE CASCADE,
+	CONSTRAINT messages_receiver_fk
+		FOREIGN KEY (receiver_user_id)
+		REFERENCES users(user_id)
+		ON DELETE CASCADE,
 
-    CONSTRAINT messages_request_fk
-        FOREIGN KEY (request_id)
-        REFERENCES posts(post_id)
-        ON DELETE CASCADE,
+	CONSTRAINT messages_not_self_chk
+		CHECK (sender_user_id <> receiver_user_id),
 
-    CONSTRAINT messages_not_self_chk
-        CHECK (sender_user_id <> receiver_user_id),
-
-    CONSTRAINT messages_content_not_blank_chk
-        CHECK (LENGTH(TRIM(content)) > 0)
+	CONSTRAINT messages_content_not_blank_chk
+		CHECK (LENGTH(TRIM(content)) > 0)
 );
 
 
@@ -187,6 +180,9 @@ CREATE INDEX IF NOT EXISTS idx_post_images_post_id ON post_images(post_id);
 
 CREATE UNIQUE INDEX IF NOT EXISTS uq_ratings_post_rater
 ON ratings(post_id, rater_user_id);
+
+ALTER TABLE third_iteration.messages DROP COLUMN IF EXISTS request_id;
+ALTER TABLE third_iteration.messages DROP COLUMN IF EXISTS is_read;
 
 -- canonical domain rows
 INSERT INTO domains (domain_id, domain_name) VALUES

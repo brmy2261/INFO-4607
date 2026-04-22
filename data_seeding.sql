@@ -1,4 +1,3 @@
-rollback;
 set search_path to third_iteration;
 
 begin;
@@ -195,3 +194,5 @@ values
         'helpful, but the response took a little while.',
         now() - interval '2 hours'
     );
+
+COMMIT;
