@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <title>Student Quest</title>
-
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <style>
       * {
         box-sizing: border-box;
@@ -12,7 +15,7 @@
       body {
         margin: 0;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-        background: #f5f5f5;
+        background: #fffeed;
         color: #111;
       }
 
@@ -23,8 +26,8 @@
         align-items: center;
         padding: 0 24px;
         height: 56px;
-        background: #ffffff;
-        border-bottom: 1px solid #ddd;
+        background: #e6e6e6;
+        border-bottom: 2px solid #000;
         position: sticky;
         top: 0;
         z-index: 10;
@@ -49,8 +52,8 @@
         left: 0;
         right: 0;
         height: 56px;
-        background: #ffffff;
-        border-top: 1px solid #ddd;
+        background: #e6e6e6;
+        border-top: 1px solid #b7b7b7;
         display: flex;
         z-index: 10;
       }
@@ -62,10 +65,11 @@
         font: inherit;
         font-size: 0.85rem;
         font-weight: 500;
-        color: #888;
+        color: #616161;
         cursor: pointer;
         border-top: 2px solid transparent;
-        transition: color 0.15s, border-color 0.15s;
+        transition: color 0.15s, border-color 0.15s, border-width 0.15s;
+        text-transform: capitalize;
       }
 
       .tab-button:hover {
@@ -76,6 +80,8 @@
         color: #111;
         font-weight: 700;
         border-top-color: #111;
+        border-right: 2px solid #111;
+        border-left: 2px solid #111;
       }
 
       /* ── Page content ── */
@@ -88,12 +94,13 @@
         max-width: 480px;
         margin: 40px auto;
         padding: 24px;
-        background: #ffffff;
+        background: #e6e6e6;
         border-radius: 10px;
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
         display: flex;
         flex-direction: column;
         gap: 10px;
+        border: 2px solid #000;
       }
 
       .auth-form input {
@@ -106,6 +113,7 @@
       .auth-form h2 {
         margin: 0 0 4px 0;
         font-size: 1.1rem;
+        font-weight: 700 !important;
       }
 
       .form-actions {
@@ -161,7 +169,7 @@
         padding: 8px 14px;
         border-radius: 6px;
         border: none;
-        background: #2d8a4e;
+        background: #0000df;
         color: #fff;
         cursor: pointer;
         font: inherit;
@@ -170,7 +178,7 @@
       }
 
       .join-call-button:hover {
-        background: #236e3e;
+        background: #0000b1;
       }
 
       .delete-post-button {
@@ -202,7 +210,7 @@
       .empty-message {
         padding: 48px 16px;
         text-align: center;
-        color: #888;
+        color: #616161;
         font-size: 0.95rem;
       }
 
@@ -214,6 +222,7 @@
       .domain-heading {
         margin: 0 0 16px 0;
         font-size: 1.2rem;
+        font-weight: 700 !important;
         text-transform: capitalize;
       }
 
@@ -231,21 +240,23 @@
       }
 
       .category-sidebar {
-        background: #ffffff;
+        background: #e6e6e6;
         border-radius: 10px;
         padding: 14px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
         display: flex;
         flex-direction: column;
         gap: 6px;
+        border: 2px solid #000;
       }
 
       .category-sidebar h3 {
         margin: 0 0 8px 0;
         font-size: 0.8rem;
+        font-weight: 700 !important;
         text-transform: uppercase;
         letter-spacing: 0.06em;
-        color: #888;
+        color: #6b6b6b;
       }
 
       .cat-button {
@@ -262,11 +273,11 @@
       }
 
       .cat-button:hover {
-        background: #f0f0f0;
+        background: #ffffff;
       }
 
       .cat-button.active {
-        background: #f0f0f0;
+        background: #ffffff;
         border-color: #ccc;
         color: #111;
         font-weight: 600;
@@ -286,13 +297,14 @@
       }
 
       .section-card {
-        background: #ffffff;
+        background: #e6e6e6;
         border-radius: 10px;
         padding: 14px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
         display: flex;
         flex-direction: column;
         gap: 6px;
+        border: 2px solid #000;
       }
 
       .section-card p {
@@ -319,13 +331,14 @@
       .post-form {
         max-width: 560px;
         padding: 16px;
-        background: #ffffff;
+        background: #e6e6e6;
         border-radius: 10px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         display: flex;
         flex-direction: column;
         gap: 10px;
         margin-bottom: 16px;
+        border: 2px solid #000;
       }
 
       .post-form input,
@@ -393,6 +406,7 @@
         gap: 6px;
         margin-top: 16px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+        border: 2px solid #000;
       }
 
       .profile-avatar {
@@ -538,8 +552,9 @@
         align-items: center;
         gap: 12px;
         padding: 16px 0 12px 0;
-        border-bottom: 1px solid #eee;
         margin-bottom: 12px;
+        background: #e6e6e6;
+        border: 2px solid #000;
       }
 
       .messages-thread-name {
@@ -647,6 +662,10 @@
 
     <script type="text/babel">
 
+      function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      }
+
       function StudentQuest() {
         const [user, setUser] = React.useState(null);
         const [token, setToken] = React.useState("");
@@ -679,6 +698,10 @@
         const [activeConversation, setActiveConversation] = React.useState(null);
         const [thread, setThread] = React.useState([]);
         const [newMsg, setNewMsg] = React.useState("");
+
+        const [loadingPosts, setLoadingPosts] = React.useState(false);
+        const [loadingProfile, setLoadingProfile] = React.useState(false);
+        const [loadingMessages, setLoadingMessages] = React.useState(false);
 
         // ── Effects ──────────────────────────────────────────
 
@@ -721,10 +744,11 @@
           if (!selectedDomain) return;
           var url = "http://localhost:8000/posts?domain_id=" + selectedDomain.domain_id + "&token=" + token;
           if (selectedCategory) url += "&category_id=" + selectedCategory.category_id;
+          setLoadingPosts(true);
           fetch(url)
             .then(function (r) { return r.json(); })
-            .then(function (data) { setPosts(data.posts || []); })
-            .catch(function () { setPosts([]); });
+            .then(function (data) { setPosts(data.posts || []); setLoadingPosts(false); })
+            .catch(function () { setPosts([]); setLoadingPosts(false); });
         }, [selectedDomain, selectedCategory]);
 
         // ── Auth handlers ─────────────────────────────────────
@@ -805,12 +829,21 @@
         // ── Profile handlers ──────────────────────────────────
 
         function handleOpenProfile() {
+          setLoadingProfile(true);
           fetch("http://localhost:8000/users/" + user.user_id + "/posts")
             .then(function (r) { return r.json(); })
-            .then(function (data) { setUserPosts(data.posts || []); })
-            .catch(function () { setUserPosts([]); });
+            .then(function (data) { setUserPosts(data.posts || []); setLoadingProfile(false); })
+            .catch(function () { setUserPosts([]); setLoadingProfile(false); });
           setShowMessages(false);
           setShowProfile(true);
+        }
+
+        function goHome() {
+          setSelectedDomain(null);
+          setSelectedCategory(null);
+          setShowProfile(false);
+          setShowMessages(false);
+          setShowCreatePost(false);
         }
 
         // ── Post handlers ─────────────────────────────────────
@@ -878,9 +911,11 @@
         // ── Message handlers ──────────────────────────────────
 
         function handleOpenMessages() {
+          setLoadingMessages(true);
           fetch("http://localhost:8000/messages?token=" + token)
             .then(function (r) { return r.json(); })
-            .then(function (data) { setConversations(data.conversations || []); });
+            .then(function (data) { setConversations(data.conversations || []); setLoadingMessages(false); })
+            .catch(function () { setConversations([]); setLoadingMessages(false); });
           setShowProfile(false);
           setShowMessages(true);
           setActiveConversation(null);
@@ -960,7 +995,22 @@
 
             {/* Header */}
             <header className="app-header">
-              <h1 className="app-title">Student Quest</h1>
+              <h1 className="app-title">
+                <img
+                  src="logo.jpeg"
+                  alt="SQ logo"
+                  onClick={goHome}
+                  style={{
+                    height: "36px",
+                    width: "auto",
+                    marginRight: "8px",
+                    borderRadius: "6px",
+                    verticalAlign: "middle",
+                    cursor: "pointer"
+                  }}
+                />
+                Student Quest
+              </h1>
               {user ? (
                 <div className="header-actions">
                   <button
@@ -993,6 +1043,7 @@
                     activeConversation={activeConversation}
                     thread={thread}
                     newMsg={newMsg}
+                    loading={loadingMessages}
                     onNewMsgChange={function (val) { setNewMsg(val); }}
                     onOpenThread={handleOpenThread}
                     onSend={handleSendMessage}
@@ -1013,7 +1064,12 @@
                     </div>
                     <div className="profile-posts-section">
                       <p className="profile-posts-heading">My Posts</p>
-                      {userPosts.length === 0 ? (
+                      {loadingProfile ? (
+                        <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center" }}>
+                          <div className="spinner-border" role="status"></div>
+                          <p style={{ marginTop: "12px", color: "#616161" }}>Loading profile...</p>
+                        </div>
+                      ) : userPosts.length === 0 ? (
                         <p className="profile-empty">No posts yet.</p>
                       ) : (
                         userPosts.map(function (p) {
@@ -1079,7 +1135,7 @@
                         <h3>
                           {selectedCategory
                             ? selectedCategory.name + " posts"
-                            : "All " + selectedDomain.domain_name + " posts"}
+                            : "All " + capitalize(selectedDomain.domain_name) + " posts"}
                         </h3>
 
                         {/* Create post — only when a category is selected */}
@@ -1117,7 +1173,12 @@
                           </div>
                         ) : null}
 
-                        {posts.length === 0 ? (
+                        {loadingPosts ? (
+                          <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center" }}>
+                            <div className="spinner-border" role="status"></div>
+                            <p style={{ marginTop: "12px", color: "#616161" }}>Loading posts...</p>
+                          </div>
+                        ) : posts.length === 0 ? (
                           <div className="empty-message">No posts found.</div>
                         ) : (
                           <div className="section-list">
@@ -1449,7 +1510,12 @@
         return (
           <div className="messages-panel">
             <h2 className="messages-heading">Messages</h2>
-            {props.conversations.length === 0 ? (
+            {props.loading ? (
+              <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center" }}>
+                <div className="spinner-border" role="status"></div>
+                <p style={{ marginTop: "12px", color: "#616161" }}>Loading messages...</p>
+              </div>
+            ) : props.conversations.length === 0 ? (
               <div className="empty-message">No conversations yet.</div>
             ) : (
               props.conversations.map(function (convo) {
@@ -1478,5 +1544,6 @@
       const root = ReactDOM.createRoot(container);
       root.render(<StudentQuest />);
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
